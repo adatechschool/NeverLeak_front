@@ -74,6 +74,15 @@ export default function MenuScreen({ navigation }) {
                 >
                     <Text>Calendar</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        navigation.navigate('Cycle');
+                    }}
+                >
+                    <Text>Cycle</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
