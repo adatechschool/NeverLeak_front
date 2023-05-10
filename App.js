@@ -10,6 +10,7 @@ import HomeScreen from './screens/HomeScreen.js';
 import LoginScreen from './screens/LoginScreen.js';
 import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen.js';
+import CycleScreen from './screens/CycleScreen';
 
 export default function App() {
     return (
@@ -33,6 +34,7 @@ export default function App() {
                     component={WelcomeScreen}
                     options={{ title: 'Welcome' }}
                 />
+                <Stack.Screen name="Cycle" component={CycleScreen} options={{ title: 'Cycle' }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
