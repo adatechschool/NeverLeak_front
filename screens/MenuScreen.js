@@ -2,10 +2,11 @@ import { useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Logo from '../assets/logo_neverleak.png';
+import LogoComponent from '../components/LogoComponent.js';
 
 // Import custom fonts
 import { useFonts } from 'expo-font';
-import Roboto from '../assets/fonts/Roboto-Bold.ttf';
+import Alegreya from '../assets/fonts/Alegreya-Bold.ttf';
 
 // Keep the splash screen visible while resources are fetched
 import * as SplashScreen from 'expo-splash-screen';
@@ -13,7 +14,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function MenuScreen({ navigation }) {
     const [fontsLoaded] = useFonts({
-        'Roboto-Bold': Roboto,
+        'Alegreya-Bold': Alegreya,
     });
 
     //Lorsque la font est téléchargée, on cache l'écran de téléchargement et on montre l'écran souhaité
@@ -31,7 +32,7 @@ export default function MenuScreen({ navigation }) {
             {/* <StatusBar style="auto" /> */}
             <View style={styles.logoContainer}>
                 <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
-                <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 40 }}>NeverLeak</Text>
+                <Text style={{ fontFamily: 'Alegreya-Bold', fontSize: 40 }}>NeverLeak</Text>
             </View>
             <View>
                 <TouchableOpacity
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     },
     h1: {
         fontSize: 40,
-        fontFamily: 'Roboto-Bold',
+        fontFamily: 'Alegreya-Bold',
         textAlign: 'center',
         // alignItems: 'flex-end',
     },
