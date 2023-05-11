@@ -11,7 +11,25 @@ export default function CalendarScreen({ navigation }) {
     const markedPeriod = (days) => {
         const markedDates = {};
         days.map((day) => {
-            markedDates[day] = { selected: true, marked: true, selectedColor: '#FF9A61' };
+            if (day === days[0] && days.length > 1) {
+                markedDates[day] = {
+                    startingDay: true,
+                    color: '#FF9A61',
+                };
+            } else if (day === days[days.length - 1] && days.length > 1) {
+                markedDates[day] = {
+                    selected: true,
+                    endingDay: true,
+                    color: '#FF9A61',
+                };
+            } else {
+                markedDates[day] = {
+                    selected: true,
+                    startingDay: true,
+                    endingDay: true,
+                    color: '#FF9A61',
+                };
+            }
         });
         return markedDates;
     };
@@ -52,6 +70,7 @@ export default function CalendarScreen({ navigation }) {
                     calendarBackground: '#FEF6D9',
                 }}
                 onDayPress={(day) => handleOnPressDay(day)}
+                markingType={'period'}
                 markedDates={selectedDays.marked}
             />
         </View>
