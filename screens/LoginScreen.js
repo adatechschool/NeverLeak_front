@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-import Auth from './Components/Auth.js';
-import Account from './Components/Account';
+import Auth from '../Components/Auth.js';
+import Account from '../Components/Account';
 import { useState, useEffect } from 'react';
-import { supabase } from './supabase.js';
+import { supabase } from '../supabase.js';
 
 //A ScrollView component that handles keyboard appearance and automatically scrolls to focused TextInput
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
