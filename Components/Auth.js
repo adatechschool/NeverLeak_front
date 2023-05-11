@@ -4,7 +4,6 @@ import { supabase } from '../supabase.js';
 import { Button } from 'react-native-elements';
 
 export default function Auth() {
-    const [pseudo, setPseudo] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -25,7 +24,6 @@ export default function Auth() {
         const { error } = await supabase.auth.signUp({
             email: email,
             password: password,
-            pseudo: pseudo,
         });
 
         if (error) Alert.alert(error.message);
@@ -34,16 +32,6 @@ export default function Auth() {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <TextInput
-                    label="Pseudo"
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                    onChangeText={(text) => setPseudo(text)}
-                    value={pseudo}
-                    placeholder="pseudo"
-                    autoCapitalize={'none'}
-                />
-            </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
                 <TextInput
                     label="Email"
