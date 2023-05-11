@@ -8,14 +8,13 @@ export default function CalendarScreen({ navigation }) {
     const [markedDatesObj, setMarkedDatesObj] = useState({});
 
     useEffect(() => {
-        markedPeriod(selectedDays);
         setMarkedDatesObj(markedPeriod(selectedDays));
     }, [selectedDays]);
 
     const markedPeriod = (days) => {
         const markedDates = {};
         days.map((day) => {
-            markedDates[day] = { selected: true, marked: true, selectedColor: 'orange' };
+            markedDates[day] = { selected: true, marked: true, selectedColor: '#FF9A61' };
         });
         console.log('obj markedDates = ', markedDates);
         return markedDates;
@@ -32,6 +31,10 @@ export default function CalendarScreen({ navigation }) {
                     borderColor: 'gray',
                     height: 350,
                 }}
+                theme={{
+                    backgroundColor: '#FEF6D9',
+                    calendarBackground: '#FEF6D9',
+                }}
                 onDayPress={(day) => {
                     const periodDay = day.dateString;
                     console.log('selected day', periodDay);
@@ -47,7 +50,7 @@ export default function CalendarScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#FEF6D9',
         alignItems: 'center',
         justifyContent: 'center',
     },
