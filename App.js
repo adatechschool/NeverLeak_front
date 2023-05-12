@@ -10,7 +10,7 @@ import LoginScreen from './screens/LoginScreen.js';
 import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen.js';
 import 'react-native-url-polyfill/auto';
-
+import CycleScreen from './screens/CycleScreen';
 //import { Session } from '@supabase/supabase-js';
 
 export default function App() {
@@ -35,6 +35,7 @@ export default function App() {
                     component={WelcomeScreen}
                     options={{ title: 'Welcome' }}
                 />
+                <Stack.Screen name="Cycle" component={CycleScreen} options={{ title: 'Cycle' }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
