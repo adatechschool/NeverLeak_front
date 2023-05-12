@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Logo from '../assets/logo_neverleak.png';
-import LogoComponent from '../components/LogoComponent.js';
+// import LogoComponent from '../components/LogoComponent.js';
 
 // Import custom fonts
 import { useFonts } from 'expo-font';
