@@ -5,17 +5,17 @@ const Stack = createNativeStackNavigator();
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import 'react-native-url-polyfill/auto';
+
 //Importer les routes (=screens)
-import MenuScreen from './screens/MenuScreen';
+// import MenuScreen from './screens/MenuScreen';
 import CalendarScreen from './screens/CalendarScreen';
-import HomeScreen from './screens/HomeScreen.js';
+// import HomeScreen from './screens/HomeScreen.js';
 import LoginScreen from './screens/LoginScreen.js';
 import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen.js';
-import 'react-native-url-polyfill/auto';
 import CycleScreen from './screens/CycleScreen';
 import ProfileScreen from './screens/ProfileScreen';
 //import { Session } from '@supabase/supabase-js';
@@ -53,7 +53,6 @@ export default function App() {
 
                     tabBarStyle: { backgroundColor: '#86C8BC', height: 60, padding: 5 },
                 }}
-                style={styles.navigator}
             >
                 <Tab.Screen
                     name="Cycle"
@@ -62,7 +61,7 @@ export default function App() {
                         tabBarLabel: 'Cycle',
                         tabBarLabelStyle: { padding: 5 },
                         tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="home" color={'black'} size={30} />
+                            <Ionicons name="refresh-outline" color={'black'} size={30} />
                         ),
                     }}
                 />
@@ -125,9 +124,3 @@ export default function App() {
         </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    navigator: {
-        backgroundColor: '#86C8BC',
-    },
-});
