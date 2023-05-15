@@ -1,34 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Auth from '../Components/Auth.js';
 import Account from '../Components/Account';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
+import { SessionContext } from '../App.js';
 
 //A ScrollView component that handles keyboard appearance and automatically scrolls to focused TextInput
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import CycleScreen from './CycleScreen.js';
 
 export default function LoginScreen({ navigation }) {
-    // const [mail, setMail] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [message, setMessage] = useState('');
-    // const [password, setPassword] = useState('');
-
-    const [session, setSession] = useState(null);
-
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
-
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-    }, []);
+    const { session, setSession } = useContext(SessionContext);
 
     return (
         <View>
             {session && session.user ? (
-                <Account key={session.user.id} session={session} />
+                <CycleScreen key={session.user.id} session={session} />
             ) : (
                 <Auth />
             )}
