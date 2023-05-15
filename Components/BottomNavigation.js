@@ -44,6 +44,7 @@ const BottomNavigation = () => {
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="refresh-outline" color={color} size={30} />
                     ),
+                    // headerShown: false,
                 }}
             />
             <Tab.Screen
