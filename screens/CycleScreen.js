@@ -5,6 +5,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 // import * as Font from 'expo-font';
 
 const screenWidth = Dimensions.get('window').width;
+console.log(screenWidth);
 
 export default function CycleScreen() {
     // const [fontsLoaded] = useFonts({
@@ -27,7 +28,7 @@ export default function CycleScreen() {
     };
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
-    const startDate = new Date('2023-05-01');
+    const startDate = new Date('2023-04-26');
     const endDate = new Date();
     const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
     const periodStart = 28 - daysBetweenDates;
@@ -40,7 +41,16 @@ export default function CycleScreen() {
         textDays = 'jours avant les prochaines règles';
     }
 
-    console.log(daysBetweenDates);
+    let radius = 0;
+    if (screenWidth <= 300) {
+        radius = 150;
+    } else if (screenWidth > 300 && screenWidth < 400) {
+        radius = 170;
+    } else if (screenWidth >= 400) {
+        radius = 190;
+    }
+
+    // console.log(daysBetweenDates);
 
     return (
         <>
@@ -55,10 +65,9 @@ export default function CycleScreen() {
                         value={value}
                         // title={periodStart + ` jours avant les prochaines règles`}
                         // subtitle={`Jour ` + daysBetweenDates + ` du cycle`}
-                        // titleStyle={{ }}
                         showProgressValue={false}
-                        radius={190}
-                        activeStrokeWidth={15} //vert
+                        radius={radius}
+                        activeStrokeWidth={20} //vert
                         activeStrokeColor={'#FF9A61'}
                         inActiveStrokeWidth={40} //gris
                         progressValueStyle={{ fontWeight: '100', color: 'black' }}
