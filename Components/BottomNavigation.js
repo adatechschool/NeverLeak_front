@@ -21,9 +21,20 @@ const BottomNavigation = () => {
                 tabBarActiveTintColor: '#FEF6D9',
                 tabBarInactiveTintColor: 'black',
                 tabBarStyle: { backgroundColor: '#86C8BC', height: 60, padding: 5 },
-                // headerShown: 'false',
+                headerShown: false,
             }}
         >
+            <Tab.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                    tabBarLabel: 'Connexion',
+                    tabBarLabelStyle: { padding: 5 },
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="log-in-outline" color={color} size={30} />
+                    ),
+                }}
+            />
             <Tab.Screen
                 name="Cycle"
                 component={CycleScreen}
@@ -33,6 +44,7 @@ const BottomNavigation = () => {
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="refresh-outline" color={color} size={30} />
                     ),
+                    // headerShown: false,
                 }}
             />
             <Tab.Screen
@@ -43,17 +55,6 @@ const BottomNavigation = () => {
                     tabBarLabelStyle: { padding: 5 },
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="calendar-outline" color={color} size={30} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                    tabBarLabel: 'Connexion',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="log-in-outline" color={color} size={30} />
                     ),
                 }}
             />

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Auth from '../Components/Auth.js';
 import Account from '../Components/Account';
+// import Logo from '../Components/Logo.js';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabase.js';
 
@@ -26,20 +27,23 @@ export default function LoginScreen({ navigation }) {
     }, []);
 
     return (
-        <View>
-            {session && session.user ? (
-                <Account key={session.user.id} session={session} />
-            ) : (
-                <Auth />
-            )}
-        </View>
+        <>
+            {/* <Logo /> */}
+            <View style={styles.container}>
+                {session && session.user ? (
+                    <Account key={session.user.id} session={session} />
+                ) : (
+                    <Auth />
+                )}
+            </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#86C8BC',
         alignItems: 'center',
         justifyContent: 'center',
     },
