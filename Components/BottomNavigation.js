@@ -20,8 +20,8 @@ const BottomNavigation = () => {
             screenOptions={{
                 tabBarActiveTintColor: '#FEF6D9',
                 tabBarInactiveTintColor: 'black',
-
                 tabBarStyle: { backgroundColor: '#86C8BC', height: 60, padding: 5 },
+                headerShown: false,
             }}
         >
             <Tab.Screen
@@ -30,7 +30,9 @@ const BottomNavigation = () => {
                 options={{
                     tabBarLabel: 'Connexion',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => <Ionicons name="log-in-outline" color={'black'} size={30} />,
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="log-in-outline" color={color} size={30} />
+                    ),
                 }}
             />
             <Tab.Screen
@@ -39,7 +41,9 @@ const BottomNavigation = () => {
                 options={{
                     tabBarLabel: 'Cycle',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => <Ionicons name="refresh-outline" color={'black'} size={30} />,
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="refresh-outline" color={color} size={30} />
+                    ),
                 }}
             />
             <Tab.Screen
@@ -48,20 +52,19 @@ const BottomNavigation = () => {
                 options={{
                     tabBarLabel: 'Calendrier',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => (
-                        <Ionicons name="calendar-outline" color={'black'} size={30} />
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="calendar-outline" color={color} size={30} />
                     ),
                 }}
             />
-
             <Tab.Screen
                 name="Register"
                 component={RegistrationScreen}
                 options={{
                     tabBarLabel: 'Register',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => (
-                        <Ionicons name="person-add-outline" color={'black'} size={30} />
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="person-add-outline" color={color} size={30} />
                     ),
                 }}
             />
@@ -71,7 +74,9 @@ const BottomNavigation = () => {
                 options={{
                     tabBarLabel: 'Bienvenue',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => <Ionicons name="happy-outline" color={'black'} size={30} />,
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="happy-outline" color={color} size={30} />
+                    ),
                 }}
             />
             <Tab.Screen
@@ -80,7 +85,9 @@ const BottomNavigation = () => {
                 options={{
                     tabBarLabel: 'Profil',
                     tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => <Ionicons name="person-outline" color={'black'} size={30} />,
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="person-outline" color={color} size={30} />
+                    ),
                 }}
             />
         </Tab.Navigator>
