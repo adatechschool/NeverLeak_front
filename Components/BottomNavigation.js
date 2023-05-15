@@ -25,6 +25,15 @@ const BottomNavigation = () => {
             }}
         >
             <Tab.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                    tabBarLabel: 'Connexion',
+                    tabBarLabelStyle: { padding: 5 },
+                    tabBarIcon: () => <Ionicons name="log-in-outline" color={'black'} size={30} />,
+                }}
+            />
+            <Tab.Screen
                 name="Cycle"
                 component={CycleScreen}
                 options={{
@@ -44,15 +53,7 @@ const BottomNavigation = () => {
                     ),
                 }}
             />
-            <Tab.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                    tabBarLabel: 'Connexion',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: () => <Ionicons name="log-in-outline" color={'black'} size={30} />,
-                }}
-            />
+
             <Tab.Screen
                 name="Register"
                 component={RegistrationScreen}

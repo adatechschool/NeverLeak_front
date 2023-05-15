@@ -40,7 +40,8 @@ export default function App() {
     return (
         <SessionContext.Provider value={{ session, setSession }}>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Menu">
+                {/* <Stack.Navigator initialRouteName="Menu"> */}
+                <BottomNavigation />
                     {/* <Stack.Screen
                     name="Home"
                     component={HomeScreen}
@@ -51,7 +52,7 @@ export default function App() {
                 <Stack.Screen name="Auth" component={Auth} options={{ title: 'Auth' }} />
                 <Stack.Screen name="Cycle" component={CycleScreen} options={{ title: 'Cycle' }} /> */}
 
-                    <Stack.Screen name="Menu" component={MenuScreen} options={{ title: 'Menu' }} />
+                    {/* <Stack.Screen name="Menu" component={MenuScreen} options={{ title: 'Menu' }} />
                     <Stack.Screen
                         name="Login"
                         component={LoginScreen}
@@ -78,8 +79,8 @@ export default function App() {
                         name="Cycle"
                         component={CycleScreen}
                         options={{ title: 'Cycle' }}
-                    />
-                </Stack.Navigator>
+                    /> */}
+                {/* </Stack.Navigator> */}
             </NavigationContainer>
         </SessionContext.Provider>
     );
