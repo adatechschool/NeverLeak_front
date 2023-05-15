@@ -1,22 +1,28 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const Stack = createNativeStackNavigator();
+
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// const Stack = createNativeStackNavigator();
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// const Tab = createBottomTabNavigator();
+
+import 'react-native-url-polyfill/auto';
 
 //Importer les routes (=screens)
-import MenuScreen from './screens/MenuScreen';
+// import MenuScreen from './screens/MenuScreen';
 import CalendarScreen from './screens/CalendarScreen';
-import HomeScreen from './screens/HomeScreen.js';
+// import HomeScreen from './screens/HomeScreen.js';
 import LoginScreen from './screens/LoginScreen.js';
-import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen.js';
-import 'react-native-url-polyfill/auto';
 import CycleScreen from './screens/CycleScreen';
+import ProfileScreen from './screens/ProfileScreen';
 //import { Session } from '@supabase/supabase-js';
+import BottomNavigation from './Components/BottomNavigation';
 
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Menu">
+            <BottomNavigation />
+            {/* <Stack.Navigator initialRouteName="Menu">
                 <Stack.Screen name="Menu" component={MenuScreen} options={{ title: 'Menu' }} />
                 <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
                 <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
@@ -36,7 +42,7 @@ export default function App() {
                     options={{ title: 'Welcome' }}
                 />
                 <Stack.Screen name="Cycle" component={CycleScreen} options={{ title: 'Cycle' }} />
-            </Stack.Navigator>
+            </Stack.Navigator> */}
         </NavigationContainer>
     );
 }
