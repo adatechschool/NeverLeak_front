@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import CycleScreen from './CycleScreen';
+import Auth from '../Components/Auth';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, session, setSession }) {
     return (
-        <View style={styles.container}>
-            <Text>Home</Text>
-            <StatusBar style="auto" />
+        <View>
+            {session && session.user ? navigation.navigate('Cycle') : navigation.navigate('Auth')}
         </View>
     );
 }

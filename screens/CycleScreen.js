@@ -10,7 +10,6 @@ export default function CycleScreen() {
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
-
     const calculateDaysBetweenDates = (startDate, endDate) => {
         // Convert the start and end dates to UTC to avoid timezone-related issues
         const startUtc = Date.UTC(
