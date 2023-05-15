@@ -4,7 +4,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
-// const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get('window').width;
 
 export default function CycleScreen() {
     // const [fontsLoaded] = useFonts({
@@ -27,7 +27,7 @@ export default function CycleScreen() {
     };
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
-    const startDate = new Date('2023-04-15');
+    const startDate = new Date('2023-05-01');
     const endDate = new Date();
     const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
     const periodStart = 28 - daysBetweenDates;

@@ -1,20 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
-import { StatusBar } from 'expo-status-bar'; //Pour changer le CSS de la status bar
-import Constants from 'expo-constants'; //Pour avoir la hauteur de la status bar
-
-// Import custom fonts
-import { useFonts } from 'expo-font';
-import RozhaOne from '../assets/fonts/RozhaOne-Regular.ttf';
-
-// Keep the splash screen visible while resources are fetched
-import * as SplashScreen from 'expo-splash-screen';
-SplashScreen.preventAutoHideAsync();
-
-// A ScrollView component that handles keyboard appearance and automatically scrolls to focused TextInput
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
-//const windowHeight = Dimensions.get('window').height;
 
 export default function RegistrationScreen({ navigation }) {
     const [name, setName] = useState('');
@@ -22,23 +7,8 @@ export default function RegistrationScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [checkPassword, setCheckPassword] = useState('');
 
-    const [fontsLoaded] = useFonts({
-        'RozhaOne-Regular': RozhaOne,
-    });
-
-    //Lorsque la font est téléchargée, on cache l'écran de téléchargement et on montre l'écran souhaité
-    const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded) {
-            await SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
-
-    if (!fontsLoaded) {
-        return null;
-    }
-
     return (
-        <View style={styles.container} onLayout={onLayoutRootView}>
+        <View style={styles.container}>
             <View style={styles.form}>
                 <Text style={styles.h1}>NeverLeak</Text>
                 <TextInput
@@ -106,7 +76,6 @@ const styles = StyleSheet.create({
     },
     h1: {
         fontSize: 40,
-        fontFamily: 'RozhaOne-Regular',
         marginBottom: 20,
         textAlign: 'center',
         fontWeight: 'bold',
