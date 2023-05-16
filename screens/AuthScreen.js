@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
 import { supabase } from '../supabase.js';
 import Logo from '../assets/logo_neverleak.png';
+import { Toast } from 'toastify-react-native';
 
 export default function Auth() {
     const [email, setEmail] = useState('');
@@ -32,55 +33,58 @@ export default function Auth() {
 
     return (
         <View style={styles.container}>
-        <View style={styles.form}>
-            <View style={styles.logoContainer}>
-                <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
-                <Text style={styles.h1}>NeverLeak</Text>
-            </View>
-            <TextInput
-                style={styles.input}
-                label="Email"
-                leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-                placeholder="email@address.com"
-                autoCapitalize={'none'}
-            />
-            <TextInput
-                style={styles.input}
-                label="Password"
-                leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-                secureTextEntry={true}
-                placeholder="password"
-                autoCapitalize={'none'}
-            />
-            <View style={styles.passwordView}>
-                <Text style={styles.passwordText}>
-                    The password must contain at least 8 characters, including one upper case, one
-                    lower case, one number and one special character.
-                </Text>
-            </View>
-            <View style={styles.button}>
+            <View style={styles.form}>
+                <View style={styles.logoContainer}>
+                    <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                    <Text style={styles.h1}>NeverLeak</Text>
+                </View>
+                <TextInput
+                    style={styles.input}
+                    label="Email"
+                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                    onChangeText={(text) => setEmail(text)}
+                    value={email}
+                    placeholder="email@address.com"
+                    autoCapitalize={'none'}
+                />
+                <TextInput
+                    style={styles.input}
+                    label="Password"
+                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    onChangeText={(text) => setPassword(text)}
+                    value={password}
+                    secureTextEntry={true}
+                    placeholder="password"
+                    autoCapitalize={'none'}
+                />
+                <View style={styles.passwordView}>
+                    <Text style={styles.passwordText}>
+                        The password must contain at least 8 characters, including one upper case,
+                        one lower case, one number and one special character.
+                    </Text>
+                </View>
+
                 <TouchableOpacity
-                    title="Sign in"
+                    style={styles.button}
+                    title="Se connecter"
                     disabled={loading}
                     onPress={() => signInWithEmail()}
                 >
-                    <Text>Sign in</Text>
+                    <Text>Se connecter</Text>
                 </TouchableOpacity>
-            </View>
-            <View style={styles.button}>
+
                 <TouchableOpacity
-                    title="Sign up"
+                    style={styles.button}
+                    title="S'inscrire"
                     disabled={loading}
-                    onPress={() => signUpWithEmail()}
+                    onPress={() => {
+                        signUpWithEmail();
+                        Toast.info('Vérifie tes emails');
+                    }}
                 >
-                    <Text>Sign up</Text>
+                    <Text>Créer un compte</Text>
                 </TouchableOpacity>
             </View>
-        </View>
         </View>
     );
 }

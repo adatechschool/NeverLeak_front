@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
-import { StyleSheet, View, Alert, TouchableOpacity, TextInput } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { StyleSheet, View, Alert, TouchableOpacity, TextInput, Pressable } from 'react-native';
+import { Text } from 'react-native-elements';
 
 import { SessionContext } from '../Components/SessionContext';
 // import { Session } from '@supabase/supabase-js';
+import { Toast } from 'toastify-react-native';
 
 export default function Account() {
     const [loading, setLoading] = useState(true);
     const [pseudo, setPseudo] = useState('');
-    const [email, setEmail] = useState('');
     const { session, setSession } = useContext(SessionContext);
-
-    console.log(session);
 
     useEffect(() => {
         if (session) getProfile();
@@ -34,7 +32,6 @@ export default function Account() {
 
             if (data) {
                 setPseudo(data.pseudo);
-                setEmail(data.email);
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -45,7 +42,7 @@ export default function Account() {
         }
     }
 
-    async function updateProfile({ pseudo, email }) {
+    async function updateProfile({ pseudo }) {
         try {
             setLoading(true);
             if (!session?.user) throw new Error('No user on the session!');
@@ -53,7 +50,6 @@ export default function Account() {
             const updates = {
                 id: session?.user.id,
                 pseudo,
-                email,
                 updated_at: new Date(),
             };
 
@@ -74,33 +70,36 @@ export default function Account() {
     return (
         <View style={styles.container}>
             <Text style={styles.h1}>Bienvenue {pseudo}</Text>
+            <View style={styles.form}>
+                <TextInput
+                    style={styles.input}
+                    label="Pseudo"
+                    value={pseudo || ''}
+                    placeholder="pseudo"
+                    onChangeText={(text) => setPseudo(text)}
+                />
 
-            <TextInput
-                style={styles.input}
-                label="Email"
-                placeholder={session?.user?.email}
-                onChangeText={(text) => setEmail(text)}
-            />
-
-            <TextInput
-                style={styles.input}
-                label="Pseudo"
-                value={pseudo || ''}
-                placeholder="pseudo"
-                onChangeText={(text) => setPseudo(text)}
-            />
-
-            <View style={styles.button}>
                 <TouchableOpacity
+                    style={styles.button}
                     title={loading ? 'Loading ...' : 'Update'}
-                    onPress={() => updateProfile({ pseudo, email })}
+                    onPress={() => {
+                        updateProfile({ pseudo });
+                        Toast.info('Profil modifié !');
+                    }}
                     disabled={loading}
+                    activeOpacity={0.2}
                 >
                     <Text>Modifier mon profil</Text>
                 </TouchableOpacity>
-            </View>
-            <View style={styles.button}>
-                <TouchableOpacity title="Sign Out" onPress={() => supabase.auth.signOut()}>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    title="Sign Out"
+                    onPress={() => {
+                        supabase.auth.signOut();
+                    }}
+                    activeOpacity={0.2}
+                >
                     <Text>Déconnexion</Text>
                 </TouchableOpacity>
             </View>
@@ -119,6 +118,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         marginBottom: 20,
+        paddingHorizontal: 10,
     },
     logoContainer: {
         flexDirection: 'row',
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         paddingHorizontal: 10,
-        paddingVertical: 7,
+        paddingVertical: 10,
         marginTop: 15,
         borderRadius: 20,
         backgroundColor: '#FF9A61',
