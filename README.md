@@ -10,20 +10,7 @@ Création d'une application de suivi du cycle menstruel.
 -   Expo
 -   React Native
 -   Librairie Calendar pour react native : https://wix.github.io/react-native-calendars/docs/Intro => Permet d'afficher et manipuler les calendrier
-# Cercle de proportion
-
-react-native-chart-kit
-react-native-svg
-
-# Cercle de progression
-
-react-native-circular-progress-indicator
-react-native-reanimated
-
-# Fonts
-
-expo-font
-
-# Garder un écran de chargement
-
-expo-splash-screen
+-   react-native-chart-kit => cercle de proportion [plus utilisé]
+-   react-native-circular-progress-indicator, react-native-reanimated et react-native-svg => cercle de progression de la page Cycle
+-   Expo-font
+-   expo-splash-screen => pour garder un écran de chargement en attendant le chargement des ressources
