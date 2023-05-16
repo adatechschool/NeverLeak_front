@@ -15,15 +15,19 @@ export default function CalendarScreen({ navigation }) {
     const readPeriods = async () => {
         const { data, error } = await supabase
             .from('periods')
-            .select('*')
+            .select('period_day')
             .eq('user_id', session.user.id);
 
+            
         console.log('error read = ', error);
         console.log('data =', data);
+
+        // showDates(data)
+        return data
     };
 
     useEffect(() => {
-        readPeriods();
+        readPeriods().then(showDates(data));
     }, [selectedDays]);
 
     const postDay = async (day) => {
@@ -69,6 +73,21 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
+    const showDates = (data) => {
+        const markedDates = {};
+        console.log("datashowDates", data)
+            if (data) {
+                data.map ((day)=>{
+                    console.log(day.period_day,)
+                markedDates[day.period_day] = {
+                    selected: true,
+                    startingDay: true,
+                    endingDay: true,
+                    color: '#FF9A61',
+                }});
+            }     
+    }
+
     const handleOnPressDay = (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
@@ -93,6 +112,7 @@ export default function CalendarScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
+            
             <CalendarList
                 pastScrollRange={6}
                 futureScrollRange={3}
@@ -108,7 +128,7 @@ export default function CalendarScreen({ navigation }) {
                 }}
                 onDayPress={(day) => handleOnPressDay(day)}
                 markingType={'period'}
-                markedDates={selectedDays.marked}
+                markedDates= {selectedDays.marked}
             />
         </View>
     );
