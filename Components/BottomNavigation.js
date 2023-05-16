@@ -24,7 +24,7 @@ const BottomNavigation = () => {
                 headerShown: false,
             }}
         >
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{
@@ -34,7 +34,7 @@ const BottomNavigation = () => {
                         <Ionicons name="log-in-outline" color={color} size={30} />
                     ),
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Cycle"
                 component={CycleScreen}
@@ -58,7 +58,7 @@ const BottomNavigation = () => {
                     ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Register"
                 component={RegistrationScreen}
                 options={{
@@ -79,7 +79,7 @@ const BottomNavigation = () => {
                         <Ionicons name="happy-outline" color={color} size={30} />
                     ),
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}
