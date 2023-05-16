@@ -5,7 +5,7 @@ import 'react-native-url-polyfill/auto';
 //Importer les routes (=screens)
 import BottomNavigation from './Components/BottomNavigation';
 
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import Auth from './screens/AuthScreen';
 import { SessionContext } from './Components/SessionContext';
