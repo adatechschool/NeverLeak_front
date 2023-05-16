@@ -4,11 +4,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //Importer les routes (=screens)
 import CalendarScreen from '../screens/CalendarScreen.js';
-import LoginScreen from '../screens/LoginScreen.js';
 import CycleScreen from '../screens/CycleScreen.js';
-import WelcomeScreen from '../screens/WelcomeScreen.js';
 import ProfileScreen from '../screens/ProfileScreen.js';
-import RegistrationScreen from '../screens/RegistrationScreen.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,17 +21,6 @@ const BottomNavigation = () => {
                 headerShown: false,
             }}
         >
-            {/* <Tab.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                    tabBarLabel: 'Connexion',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="log-in-outline" color={color} size={30} />
-                    ),
-                }}
-            /> */}
             <Tab.Screen
                 name="Cycle"
                 component={CycleScreen}
@@ -44,7 +30,6 @@ const BottomNavigation = () => {
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="refresh-outline" color={color} size={30} />
                     ),
-                    // headerShown: false,
                 }}
             />
             <Tab.Screen
@@ -58,28 +43,6 @@ const BottomNavigation = () => {
                     ),
                 }}
             />
-            {/* <Tab.Screen
-                name="Register"
-                component={RegistrationScreen}
-                options={{
-                    tabBarLabel: 'Register',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="person-add-outline" color={color} size={30} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Welcome"
-                component={WelcomeScreen}
-                options={{
-                    tabBarLabel: 'Bienvenue',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="happy-outline" color={color} size={30} />
-                    ),
-                }}
-            /> */}
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}

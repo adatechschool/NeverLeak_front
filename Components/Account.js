@@ -68,6 +68,7 @@ export default function Account({ session }) {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.h1}>Bienvenue 'pseudo'</Text>
             <View style={[styles.verticallySpaced, styles.mt20]}>
                 <Input label="Email" value={session?.user?.email} disabled />
             </View>
@@ -109,5 +110,28 @@ const styles = StyleSheet.create({
     },
     mt20: {
         marginTop: 20,
+    },h1: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#FEF6D9',
+        marginBottom: 20,
+    },
+    welcomeText: {
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    button: {
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        marginBottom: 20,
+        borderRadius: 20,
+        backgroundColor: '#FF9A61',
+        elevation: 5,
+    },
+    skipButton: {
+        color: 'grey',
+        fontStyle: 'italic',
     },
 });
