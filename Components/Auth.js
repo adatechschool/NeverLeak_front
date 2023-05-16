@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, TextInput } from 'react-native';
+import { Alert, StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
 import { supabase } from '../supabase.js';
-import { Button } from 'react-native-elements';
+import Logo from '../assets/logo_neverleak.png';
 
 export default function Auth() {
     const [email, setEmail] = useState('');
@@ -31,33 +31,53 @@ export default function Auth() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <TextInput
-                    label="Email"
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="email@address.com"
-                    autoCapitalize={'none'}
-                />
+        <View style={styles.form}>
+            <View style={styles.logoContainer}>
+                <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                <Text style={styles.h1}>NeverLeak</Text>
             </View>
-            <View style={styles.verticallySpaced}>
-                <TextInput
-                    label="Password"
-                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    secureTextEntry={true}
-                    placeholder="Password"
-                    autoCapitalize={'none'}
-                />
+            <TextInput
+                style={styles.input}
+                label="Email"
+                leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+                placeholder="email@address.com"
+                autoCapitalize={'none'}
+            />
+            <TextInput
+                style={styles.input}
+                label="Password"
+                leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry={true}
+                placeholder="password"
+                autoCapitalize={'none'}
+            />
+            <View style={styles.passwordView}>
+                <Text style={styles.passwordText}>
+                    The password must contain at least 8 characters, including one upper case, one
+                    lower case, one number and one special character.
+                </Text>
             </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
+            <View style={styles.button}>
+                <TouchableOpacity
+                    title="Sign in"
+                    disabled={loading}
+                    onPress={() => signInWithEmail()}
+                >
+                    <Text>Sign in</Text>
+                </TouchableOpacity>
             </View>
-            <View style={styles.verticallySpaced}>
-                <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
+            <View style={styles.button}>
+                <TouchableOpacity
+                    title="Sign up"
+                    disabled={loading}
+                    onPress={() => signUpWithEmail()}
+                >
+                    <Text>Sign up</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -65,15 +85,60 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40,
-        padding: 12,
+        flex: 1,
+        backgroundColor: '#86C8BC',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    verticallySpaced: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        alignSelf: 'stretch',
+    h1: {
+        fontSize: 40,
+        textAlign: 'center',
+        marginBottom: 20,
     },
-    mt20: {
-        marginTop: 20,
+    logoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    logo: {
+        width: 40,
+        height: 50,
+        marginRight: 10,
+    },
+    form: {
+        backgroundColor: '#FEF6D9',
+        paddingVertical: 40,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+    },
+    input: {
+        height: 40,
+        width: 250,
+        borderRadius: 10,
+        borderColor: '#FF9A61',
+        borderWidth: 1,
+        backgroundColor: 'white',
+        margin: 5,
+        padding: 5,
+        elevation: 5,
+    },
+    passwordView: {
+        width: 250,
+    },
+    passwordText: {
+        textAlign: 'center',
+        fontSize: 12,
+        fontStyle: 'italic',
+        color: 'grey',
+        marginBottom: 20,
+    },
+    button: {
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 7,
+        marginTop: 15,
+        borderRadius: 20,
+        backgroundColor: '#FF9A61',
+        elevation: 5,
     },
 });
