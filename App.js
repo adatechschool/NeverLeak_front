@@ -8,8 +8,7 @@ import BottomNavigation from './Components/BottomNavigation';
 import { useState, useEffect, createContext } from 'react';
 import { supabase } from './supabase.js';
 import Auth from './screens/AuthScreen';
-
-export const SessionContext = createContext();
+import { SessionContext } from './Components/SessionContext';
 
 export default function App() {
     const [session, setSession] = useState(null);

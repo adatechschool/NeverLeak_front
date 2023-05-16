@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
 import { StyleSheet, View, Alert } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
-import { SessionContext } from '../App.js';
+
+import { SessionContext } from '../Components/SessionContext';
 // import { Session } from '@supabase/supabase-js';
 
 export default function Account() {
     const [loading, setLoading] = useState(true);
     const [pseudo, setPseudo] = useState('');
     const [email, setEmail] = useState('');
-    const { session, setSession} = useContext(SessionContext); 
+    const { session, setSession } = useContext(SessionContext);
 
     console.log(session);
 
@@ -114,7 +115,8 @@ const styles = StyleSheet.create({
     },
     mt20: {
         marginTop: 20,
-    },h1: {
+    },
+    h1: {
         fontSize: 35,
         fontWeight: 'bold',
         textAlign: 'center',
