@@ -1,12 +1,47 @@
 import { StyleSheet, View } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { supabase } from '../supabase.js';
+import { SessionContext } from '../App';
 
 export default function CalendarScreen({ navigation }) {
+    const { session, setSession } = useContext(SessionContext);
+
     const [selectedDays, setSelectedDays] = useState({
         selected: [],
         marked: {},
     });
+
+    const readPeriods = async () => {
+        const { data, error } = await supabase
+            .from('periods')
+            .select('*')
+            .eq('user_id', session.user.id);
+
+        console.log('error read = ', error);
+        console.log('data =', data);
+    };
+
+    useEffect(() => {
+        readPeriods();
+    }, [selectedDays]);
+
+    const postDay = async (day) => {
+        const { data, error } = await supabase
+            .from('periods')
+            .insert([{ period_day: day, user_id: session.user.id }], { returning: 'minimal' });
+
+        console.log('posts error =', error);
+    };
+
+    const deleteDay = async (day) => {
+        const { data, error } = await supabase
+            .from('periods')
+            .delete()
+            .eq('user_id', day, 'user_id', session.user.id);
+
+        console.log('delete error = ', error);
+    };
 
     const markedPeriod = (days) => {
         const markedDates = {};
@@ -37,6 +72,7 @@ export default function CalendarScreen({ navigation }) {
     const handleOnPressDay = (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
+            deleteDay(periodDay);
             const newSelected = selectedDays.selected.filter((day) => day !== periodDay);
             setSelectedDays(() => {
                 return {
@@ -45,6 +81,7 @@ export default function CalendarScreen({ navigation }) {
                 };
             });
         } else {
+            postDay(periodDay);
             setSelectedDays((oldValues) => {
                 return {
                     selected: [...oldValues.selected, periodDay],
