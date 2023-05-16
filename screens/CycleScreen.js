@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Dimensions, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';

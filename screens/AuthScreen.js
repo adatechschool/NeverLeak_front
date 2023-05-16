@@ -31,6 +31,7 @@ export default function Auth() {
     }
 
     return (
+        <View style={styles.container}>
         <View style={styles.form}>
             <View style={styles.logoContainer}>
                 <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
@@ -79,6 +80,7 @@ export default function Auth() {
                     <Text>Sign up</Text>
                 </TouchableOpacity>
             </View>
+        </View>
         </View>
     );
 }
