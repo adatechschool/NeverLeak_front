@@ -52,7 +52,7 @@ export default function Auth() {
                 onChangeText={(text) => setPassword(text)}
                 value={password}
                 secureTextEntry={true}
-                placeholder="Password"
+                placeholder="password"
                 autoCapitalize={'none'}
             />
             <View style={styles.passwordView}>
@@ -85,8 +85,6 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
     container: {
-        // marginTop: 40,
-        // padding: 12,
         flex: 1,
         backgroundColor: '#86C8BC',
         alignItems: 'center',
@@ -95,14 +93,11 @@ const styles = StyleSheet.create({
     h1: {
         fontSize: 40,
         textAlign: 'center',
-        // alignItems: 'flex-end',
         marginBottom: 20,
     },
     logoContainer: {
-        // flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
-        // alignItems: 'flex-end',
         marginBottom: 20,
     },
     logo: {
