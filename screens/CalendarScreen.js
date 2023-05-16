@@ -84,22 +84,6 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
-    const showDates = (data) => {
-        const markedDates = {};
-        console.log('datashowDates', data);
-        if (data) {
-            data.map((day) => {
-                console.log(day.period_day);
-                markedDates[day.period_day] = {
-                    selected: true,
-                    startingDay: true,
-                    endingDay: true,
-                    color: '#FF9A61',
-                };
-            });
-        }
-    };
-
     const handleOnPressDay = (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
