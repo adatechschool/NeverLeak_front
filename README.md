@@ -14,3 +14,4 @@ Création d'une application de suivi du cycle menstruel.
 -   react-native-circular-progress-indicator, react-native-reanimated et react-native-svg => cercle de progression de la page Cycle
 -   Expo-font
 -   expo-splash-screen => pour garder un écran de chargement en attendant le chargement des ressources
+-   toastfy react-native pour des popup
