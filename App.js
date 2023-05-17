@@ -10,6 +10,8 @@ import { supabase } from './supabase.js';
 import Auth from './screens/AuthScreen';
 import { SessionContext } from './Components/SessionContext';
 
+import ToastManager, { Toast } from 'toastify-react-native';
+
 export default function App() {
     const [session, setSession] = useState(null);
 
@@ -25,6 +27,7 @@ export default function App() {
 
     return (
         <SessionContext.Provider value={{ session, setSession }}>
+            <ToastManager />
             <NavigationContainer>
                 {session && session.user ? (
                     <BottomNavigation key={session.user.id} session={session} />
