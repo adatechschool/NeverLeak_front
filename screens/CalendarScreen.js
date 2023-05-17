@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { supabase } from '../supabase.js';
-import { SessionContext } from '../App';
+import { SessionContext } from '../Components/SessionContext';
 import { set } from 'react-native-reanimated';
 
 export default function CalendarScreen({ navigation }) {
@@ -12,18 +12,6 @@ export default function CalendarScreen({ navigation }) {
         selected: [],
         marked: {},
     });
-
-    const readPeriods = async () => {
-        const { data, error } = await supabase
-            .from('periods')
-            .select('period_day')
-            .eq('user_id', session.user.id);
-
-        console.log('error read = ', error);
-        console.log('data read=', data);
-
-        return data;
-    };
 
     useEffect(() => {
         const readPeriodsLoad = async () => {
@@ -40,6 +28,18 @@ export default function CalendarScreen({ navigation }) {
         };
         readPeriodsLoad();
     }, []);
+
+    const readPeriods = async () => {
+        const { data, error } = await supabase
+            .from('periods')
+            .select('period_day')
+            .eq('user_id', session.user.id);
+
+        console.log('error read = ', error);
+        console.log('data read=', data);
+
+        return data;
+    };
 
     const postDay = async (day) => {
         const { data, error } = await supabase
