@@ -53,7 +53,8 @@ export default function CalendarScreen({ navigation }) {
         const { data, error } = await supabase
             .from('periods')
             .delete()
-            .eq('user_id', day, 'user_id', session.user.id);
+            .eq('user_id', session.user.id)
+            .eq('period_day', day);
 
         console.log('delete error = ', error);
     };
