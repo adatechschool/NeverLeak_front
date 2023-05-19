@@ -12,9 +12,11 @@ export default function CalendarScreen({ navigation }) {
         selected: [],
         marked: {},
     });
-    const [nextPeriod, setNextPerdiod] = useState([]);
+    const [nextPeriod, setNextPeriod] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const readPeriods = async () => {
+        setIsLoading(true);
         const { data, error } = await supabase
             .from('periods')
             .select('period_day')
@@ -25,7 +27,6 @@ export default function CalendarScreen({ navigation }) {
         const periodDayLoad = data.map((e) => e.period_day);
 
         if (periodDayLoad.length > 1) {
-            calculateNextPeriod();
             console.log('nextPeriodDay before marking =', nextPeriod);
             console.log('input markedperiod', [...periodDayLoad, ...nextPeriod]);
             setSelectedDays(() => {
@@ -34,23 +35,49 @@ export default function CalendarScreen({ navigation }) {
                     marked: markedPeriod([...periodDayLoad, ...nextPeriod]),
                 };
             });
+            calculateNextPeriod();
         }
+        setIsLoading(false);
+    };
+
+    const dateToString = (date) => {
+        const year = date.getFullYear().toString();
+        let month = (date.getMonth() + 1).toString();
+        let day = date.getDate().toString();
+
+        if (month <= 9) {
+            month = '0' + month;
+        }
+        if (day <= 9) {
+            day = '0' + day;
+        }
+
+        return year + '-' + month + '-' + day;
+    };
+
+    const nextPeriodCycle = (firstday) => {
+        let result = [];
+
+        for (let i = 28; i < 33; i++) {
+            const first = new Date(firstday);
+            const nextPeriodDay = new Date(first.setDate(first.getDate() + i));
+            console.log({ first }, { firstday });
+            const finalDay = dateToString(nextPeriodDay);
+            result.push(finalDay);
+        }
+        return result;
     };
 
     const calculateNextPeriod = () => {
         const firstCycleDay = new Date(selectedDays.selected[0]);
         console.log('firstCycleDay =', firstCycleDay);
-        const nextPeriodDay = new Date(firstCycleDay.setDate(firstCycleDay.getDate() + 28));
-        console.log('firstCycleDay = ', firstCycleDay, '  nextPeriodDay = ', typeof nextPeriodDay);
-        const finalDay =
-            nextPeriodDay.getFullYear().toString() +
-            '-0' +
-            (nextPeriodDay.getMonth() + 1).toString() +
-            '-' +
-            nextPeriodDay.getDate().toString();
-        console.log('finalDay = ', finalDay);
+        // const nextPeriodDay = new Date(firstCycleDay.setDate(firstCycleDay.getDate() + 28));
+        // console.log('firstCycleDay = ', firstCycleDay, '  nextPeriodDay = ', typeof nextPeriodDay);
 
-        setNextPerdiod([finalDay]);
+        // const finalDay = dateToString(nextPeriodDay);
+        // console.log('finalday=', finalDay);
+        console.log('nextPeriodCycle =', nextPeriodCycle(firstCycleDay));
+        setNextPeriod(nextPeriodCycle(firstCycleDay));
     };
 
     const postDay = async (day) => {
@@ -109,7 +136,7 @@ export default function CalendarScreen({ navigation }) {
 
     useEffect(() => {
         readPeriods();
-    }, []);
+    }, [isLoading]);
 
     return (
         <View style={styles.container}>
