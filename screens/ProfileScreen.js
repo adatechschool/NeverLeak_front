@@ -1,11 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
-import { StyleSheet, View, Alert, TouchableOpacity, TextInput, Pressable } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Alert,
+    TouchableOpacity,
+    TextInput,
+    Image,
+    Pressable,
+} from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { SessionContext } from '../Components/SessionContext';
 // import { Session } from '@supabase/supabase-js';
 import { Toast } from 'toastify-react-native';
+
+import Logo from '../assets/logo_neverleak.png';
 
 export default function Account() {
     const [loading, setLoading] = useState(true);
@@ -68,42 +78,62 @@ export default function Account() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.h1}>Bienvenue {pseudo}</Text>
-            <View style={styles.form}>
-                <TextInput
-                    style={styles.input}
-                    label="Pseudo"
-                    value={pseudo || ''}
-                    placeholder="pseudo"
-                    onChangeText={(text) => setPseudo(text)}
-                />
-
-                <TouchableOpacity
-                    style={styles.button}
-                    title={loading ? 'Loading ...' : 'Update'}
-                    onPress={() => {
-                        updateProfile({ pseudo });
-                        Toast.info('Profil modifié !');
-                    }}
-                    disabled={loading}
-                    activeOpacity={0.2}
-                >
-                    <Text>Modifier mon profil</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    title="Sign Out"
-                    onPress={() => {
-                        supabase.auth.signOut();
-                    }}
-                    activeOpacity={0.2}
-                >
-                    <Text>Déconnexion</Text>
-                </TouchableOpacity>
+        <>
+            <View style={styles.logoContainer}>
+                <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                <Text style={styles.textLogo}>NeverLeak</Text>
             </View>
-        </View>
+            <View style={styles.bienvenue}>
+                <Text style={styles.h1}>Bienvenue {pseudo}</Text>
+                <View>
+                    <Text style={styles.text}>Modifiez votre profil :</Text>
+                </View>
+            </View>
+            <View style={styles.container}>
+                <View style={styles.form}>
+                    <Text style={styles.label}>Pseudo</Text>
+                    <TextInput
+                        style={styles.input}
+                        label="Pseudo"
+                        value={pseudo || ''}
+                        placeholder="pseudo"
+                        onChangeText={(text) => setPseudo(text)}
+                    />
+
+                    <Text style={styles.label}>Durée du cycle</Text>
+                    <TextInput
+                        style={styles.input}
+                        label="Cycle"
+                        placeholder="Durée du cycle"
+                        disabled
+                    />
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        title={loading ? 'Loading ...' : 'Update'}
+                        onPress={() => {
+                            updateProfile({ pseudo });
+                            Toast.info('Profil modifié !');
+                        }}
+                        disabled={loading}
+                        activeOpacity={0.2}
+                    >
+                        <Text>Enregistrer les modifications</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        title="Sign Out"
+                        onPress={() => {
+                            supabase.auth.signOut();
+                        }}
+                        activeOpacity={0.2}
+                    >
+                        <Text>Déconnexion</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </>
     );
 }
 
@@ -112,27 +142,48 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FEF6D9',
         alignItems: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
     },
     h1: {
-        fontSize: 40,
+        fontSize: 35,
+        fontWeight: '200',
         textAlign: 'center',
         marginBottom: 20,
         paddingHorizontal: 10,
     },
+    textLogo: {
+        fontSize: 18,
+        marginTop: 5,
+    },
+    text: {
+        fontSize: 18,
+        marginLeft: 65,
+        paddingTop: 40,
+    },
+    bienvenue: {
+        paddingTop: 30,
+        backgroundColor: '#FEF6D9',
+    },
+    label: {
+        fontSize: 12,
+        marginLeft: 5,
+        paddingLeft: 5,
+    },
     logoContainer: {
+        backgroundColor: '#FEF6D9',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 20,
+        alignItems: 'center',
+        paddingTop: 30,
     },
     logo: {
-        width: 40,
-        height: 50,
+        width: 20,
+        height: 25,
         marginRight: 10,
     },
     form: {
         backgroundColor: '#FEF6D9',
-        paddingVertical: 40,
+        paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 20,
     },
@@ -144,6 +195,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         backgroundColor: 'white',
         margin: 5,
+        marginBottom: 15,
         padding: 5,
         elevation: 5,
     },
