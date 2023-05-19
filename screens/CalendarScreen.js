@@ -12,22 +12,7 @@ export default function CalendarScreen({ navigation }) {
         selected: [],
         marked: {},
     });
-
-    useEffect(() => {
-        const readPeriodsLoad = async () => {
-            const days = await readPeriods();
-            const periodDayLoad = days.map((e) => e.period_day);
-            console.log('periodDayLoad', periodDayLoad);
-
-            setSelectedDays(() => {
-                return {
-                    selected: periodDayLoad,
-                    marked: markedPeriod(periodDayLoad),
-                };
-            });
-        };
-        readPeriodsLoad();
-    }, []);
+    const [nextPeriod, setNextPerdiod] = useState([]);
 
     const readPeriods = async () => {
         const { data, error } = await supabase
@@ -36,9 +21,36 @@ export default function CalendarScreen({ navigation }) {
             .eq('user_id', session.user.id);
 
         console.log('error read = ', error);
-        console.log('data read=', data);
 
-        return data;
+        const periodDayLoad = data.map((e) => e.period_day);
+
+        if (periodDayLoad.length > 1) {
+            calculateNextPeriod();
+            console.log('nextPeriodDay before marking =', nextPeriod);
+            console.log('input markedperiod', [...periodDayLoad, ...nextPeriod]);
+            setSelectedDays(() => {
+                return {
+                    selected: periodDayLoad,
+                    marked: markedPeriod([...periodDayLoad, ...nextPeriod]),
+                };
+            });
+        }
+    };
+
+    const calculateNextPeriod = () => {
+        const firstCycleDay = new Date(selectedDays.selected[0]);
+        console.log('firstCycleDay =', firstCycleDay);
+        const nextPeriodDay = new Date(firstCycleDay.setDate(firstCycleDay.getDate() + 28));
+        console.log('firstCycleDay = ', firstCycleDay, '  nextPeriodDay = ', typeof nextPeriodDay);
+        const finalDay =
+            nextPeriodDay.getFullYear().toString() +
+            '-0' +
+            (nextPeriodDay.getMonth() + 1).toString() +
+            '-' +
+            nextPeriodDay.getDate().toString();
+        console.log('finalDay = ', finalDay);
+
+        setNextPerdiod([finalDay]);
     };
 
     const postDay = async (day) => {
@@ -60,8 +72,9 @@ export default function CalendarScreen({ navigation }) {
     };
 
     const markedPeriod = (days) => {
+        //cette fonction stylise les jours selectionnés en paramètre
         const markedDates = {};
-        days.map((day) => {
+        days.sort().map((day) => {
             if (day === days[0] && days.length > 1) {
                 markedDates[day] = {
                     startingDay: true,
@@ -76,8 +89,6 @@ export default function CalendarScreen({ navigation }) {
             } else {
                 markedDates[day] = {
                     selected: true,
-                    startingDay: true,
-                    endingDay: true,
                     color: '#FF9A61',
                 };
             }
@@ -85,27 +96,20 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
-    const handleOnPressDay = (value) => {
+    const handleOnPressDay = async (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
-            deleteDay(periodDay);
-            const newSelected = selectedDays.selected.filter((day) => day !== periodDay);
-            setSelectedDays(() => {
-                return {
-                    selected: newSelected,
-                    marked: markedPeriod([...newSelected]),
-                };
-            });
+            await deleteDay(periodDay);
+            readPeriods();
         } else {
-            postDay(periodDay);
-            setSelectedDays((oldValues) => {
-                return {
-                    selected: [...oldValues.selected, periodDay],
-                    marked: markedPeriod([...oldValues.selected, periodDay]),
-                };
-            });
+            await postDay(periodDay);
+            readPeriods();
         }
     };
+
+    useEffect(() => {
+        readPeriods();
+    }, []);
 
     return (
         <View style={styles.container}>
