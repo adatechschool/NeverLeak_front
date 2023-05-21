@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { supabase } from '../supabase.js';
@@ -12,32 +12,39 @@ export default function CalendarScreen({ navigation }) {
         selected: [],
         marked: {},
     });
-    const [nextPeriod, setNextPeriod] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [nextPeriod, setNextPeriod] = useState([]);
+    //OU
+    const [nextPeriod, setNextPeriod] = useState({
+        selected: [],
+        marked: {},
+    });
+
+    // const [isLoading, setIsLoading] = useState(false);
 
     const readPeriods = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
         const { data, error } = await supabase
             .from('periods')
             .select('period_day')
-            .eq('user_id', session.user.id);
+            .eq('user_id', session.user.id)
+            .order('period_day', { ascending: true });
 
+        console.log({ data });
         console.log('error read = ', error);
 
         const periodDayLoad = data.map((e) => e.period_day);
+        console.log({ periodDayLoad });
 
         if (periodDayLoad.length > 1) {
-            console.log('nextPeriodDay before marking =', nextPeriod);
-            console.log('input markedperiod', [...periodDayLoad, ...nextPeriod]);
             setSelectedDays(() => {
                 return {
                     selected: periodDayLoad,
-                    marked: markedPeriod([...periodDayLoad, ...nextPeriod]),
+                    marked: markedPeriod(periodDayLoad),
                 };
             });
-            calculateNextPeriod();
+            calculateNextPeriod(periodDayLoad[0]);
         }
-        setIsLoading(false);
+        // setIsLoading(false);
     };
 
     const dateToString = (date) => {
@@ -68,16 +75,17 @@ export default function CalendarScreen({ navigation }) {
         return result;
     };
 
-    const calculateNextPeriod = () => {
-        const firstCycleDay = new Date(selectedDays.selected[0]);
+    const calculateNextPeriod = (firstday) => {
+        const firstCycleDay = new Date(firstday);
         console.log('firstCycleDay =', firstCycleDay);
-        // const nextPeriodDay = new Date(firstCycleDay.setDate(firstCycleDay.getDate() + 28));
-        // console.log('firstCycleDay = ', firstCycleDay, '  nextPeriodDay = ', typeof nextPeriodDay);
-
-        // const finalDay = dateToString(nextPeriodDay);
-        // console.log('finalday=', finalDay);
         console.log('nextPeriodCycle =', nextPeriodCycle(firstCycleDay));
-        setNextPeriod(nextPeriodCycle(firstCycleDay));
+        // setNextPeriod(nextPeriodCycle(firstCycleDay));
+        setNextPeriod(() => {
+            return {
+                selected: nextPeriodCycle(firstCycleDay),
+                marked: markedNextPeriod(nextPeriodCycle(firstCycleDay)),
+            };
+        });
     };
 
     const postDay = async (day) => {
@@ -123,6 +131,30 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
+    const markedNextPeriod = (days) => {
+        const markedPeriod = {};
+        days.sort().map((day) => {
+            if (day === days[0] && days.length > 1) {
+                markedPeriod[day] = {
+                    startingDay: true,
+                    color: '#F8CFB8',
+                };
+            } else if (day === days[days.length - 1] && days.length > 1) {
+                markedPeriod[day] = {
+                    selected: true,
+                    endingDay: true,
+                    color: '#F8CFB8',
+                };
+            } else {
+                markedPeriod[day] = {
+                    selected: true,
+                    color: '#F8CFB8',
+                };
+            }
+        });
+        return markedPeriod;
+    };
+
     const handleOnPressDay = async (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
@@ -136,10 +168,12 @@ export default function CalendarScreen({ navigation }) {
 
     useEffect(() => {
         readPeriods();
-    }, [isLoading]);
+    }, []);
 
     return (
         <View style={styles.container}>
+            {/* <Text>{JSON.stringify(nextPeriod.marked)}</Text>
+            <Text>{JSON.stringify(selectedDays.marked)}</Text> */}
             <CalendarList
                 pastScrollRange={6}
                 futureScrollRange={3}
@@ -155,7 +189,7 @@ export default function CalendarScreen({ navigation }) {
                 }}
                 onDayPress={(day) => handleOnPressDay(day)}
                 markingType={'period'}
-                markedDates={selectedDays.marked}
+                markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
             />
         </View>
     );
