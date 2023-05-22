@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import { supabase } from '../supabase.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SessionContext } from '../Components/SessionContext';
 
 //Importer les routes (=screens)
 import CalendarScreen from '../screens/CalendarScreen.js';
@@ -10,6 +12,8 @@ import ProfileScreen from '../screens/ProfileScreen.js';
 const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
+    const { session, setSession } = useContext(SessionContext);
+
     const getPeriods = async () => {
         const { data, error } = await supabase
             .from('periods')
@@ -20,12 +24,12 @@ const BottomNavigation = () => {
         console.log({ data });
         console.log('error read = ', error);
 
-        let routeName = '';
-        if (!data) {
-            routeName = 'Profile';
-        } else {
+        let routeName = 'Profile'; // Default to 'Profile'
+        if (data && data.length > 0) {
             routeName = 'Cycle';
         }
+
+        return routeName;
     };
 
     useEffect(() => {
@@ -36,7 +40,7 @@ const BottomNavigation = () => {
         <Tab.Navigator
             activeColor="#FEF6D9"
             inactiveColor="black"
-            initialRouteName={{ routeName }}
+            initialRouteName={getPeriods()}
             screenOptions={{
                 tabBarActiveTintColor: '#FEF6D9',
                 tabBarInactiveTintColor: 'black',
