@@ -1,9 +1,9 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { supabase } from '../supabase.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SessionContext } from '../Components/SessionContext';
-
+import { useNavigation } from '@react-navigation/native';
 //Importer les routes (=screens)
 import CalendarScreen from '../screens/CalendarScreen.js';
 import CycleScreen from '../screens/CycleScreen.js';
@@ -13,6 +13,8 @@ const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
     const { session, setSession } = useContext(SessionContext);
+
+    const [initialRouteName, setInitialRouteName] = useState('Profile');
 
     const getPeriods = async () => {
         const { data, error } = await supabase
@@ -29,18 +31,28 @@ const BottomNavigation = () => {
             routeName = 'Cycle';
         }
 
+        setInitialRouteName(routeName); // Set the initial route name
         return routeName;
     };
 
     useEffect(() => {
-        getPeriods();
+        const fetchInitialRoute = async () => {
+            const routeName = await getPeriods();
+            console.log('getPeriods', routeName);
+        };
+
+        fetchInitialRoute();
     }, []);
+    // console.log('getPeriods', getPeriods());
+    // useEffect(() => {
+    //     getPeriods();
+    // }, []);
 
     return (
         <Tab.Navigator
             activeColor="#FEF6D9"
             inactiveColor="black"
-            initialRouteName={getPeriods()}
+            initialRouteName={initialRouteName}
             screenOptions={{
                 tabBarActiveTintColor: '#FEF6D9',
                 tabBarInactiveTintColor: 'black',
