@@ -69,9 +69,9 @@ const BottomNavigation = () => {
                 component={CycleScreen}
                 options={{
                     tabBarLabel: 'Cycle',
-                    tabBarLabelStyle,
+                    tabBarLabelStyle: { padding: 5 },
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="refresh-outline" color={color} size={tabBarIconSize} />
+                        <Ionicons name="refresh-outline" color={color} size={30} />
                     ),
                 }}
             />
@@ -86,6 +86,19 @@ const BottomNavigation = () => {
                     ),
                 }}
             />
+
+            <Tab.Screen
+                name="Cycle"
+                component={CycleScreen}
+                options={{
+                    tabBarLabel: 'Cycle',
+                    tabBarLabelStyle: { padding: 5 },
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="refresh-outline" color={color} size={30} />
+                    ),
+                }}
+            />
+
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}
