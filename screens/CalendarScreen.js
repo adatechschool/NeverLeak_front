@@ -35,7 +35,7 @@ export default function CalendarScreen({ navigation }) {
         const periodDayLoad = data.map((e) => e.period_day);
         console.log({ periodDayLoad });
 
-        if (periodDayLoad.length > 1) {
+        if (periodDayLoad.length >= 1) {
             setSelectedDays(() => {
                 return {
                     selected: periodDayLoad,
