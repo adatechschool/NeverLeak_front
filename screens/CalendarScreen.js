@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { supabase } from '../supabase.js';
@@ -12,33 +12,80 @@ export default function CalendarScreen({ navigation }) {
         selected: [],
         marked: {},
     });
+    // const [nextPeriod, setNextPeriod] = useState([]);
+    //OU
+    const [nextPeriod, setNextPeriod] = useState({
+        selected: [],
+        marked: {},
+    });
 
-    useEffect(() => {
-        const readPeriodsLoad = async () => {
-            const days = await readPeriods();
-            const periodDayLoad = days.map((e) => e.period_day);
-            console.log('periodDayLoad', periodDayLoad);
+    // const [isLoading, setIsLoading] = useState(false);
 
+    const readPeriods = async () => {
+        // setIsLoading(true);
+        const { data, error } = await supabase
+            .from('periods')
+            .select('period_day')
+            .eq('user_id', session.user.id)
+            .order('period_day', { ascending: true });
+
+        console.log({ data });
+        console.log('error read = ', error);
+
+        const periodDayLoad = data.map((e) => e.period_day);
+        console.log({ periodDayLoad });
+
+        if (periodDayLoad.length >= 1) {
             setSelectedDays(() => {
                 return {
                     selected: periodDayLoad,
                     marked: markedPeriod(periodDayLoad),
                 };
             });
-        };
-        readPeriodsLoad();
-    }, []);
+            calculateNextPeriod(periodDayLoad[0]);
+        }
+        // setIsLoading(false);
+    };
 
-    const readPeriods = async () => {
-        const { data, error } = await supabase
-            .from('periods')
-            .select('period_day')
-            .eq('user_id', session.user.id);
+    const dateToString = (date) => {
+        const year = date.getFullYear().toString();
+        let month = (date.getMonth() + 1).toString();
+        let day = date.getDate().toString();
 
-        console.log('error read = ', error);
-        console.log('data read=', data);
+        if (month <= 9) {
+            month = '0' + month;
+        }
+        if (day <= 9) {
+            day = '0' + day;
+        }
 
-        return data;
+        return year + '-' + month + '-' + day;
+    };
+
+    const nextPeriodCycle = (firstday) => {
+        let result = [];
+
+        for (let i = 28; i < 33; i++) {
+            const first = new Date(firstday);
+            const nextPeriodDay = new Date(first.setDate(first.getDate() + i));
+            console.log({ first }, { firstday });
+            const finalDay = dateToString(nextPeriodDay);
+            result.push(finalDay);
+        }
+        return result;
+    };
+
+    const calculateNextPeriod = (firstday) => {
+        const firstCycleDay = new Date(firstday);
+        console.log('firstCycleDay =', firstCycleDay);
+        console.log('nextPeriodCycle =', nextPeriodCycle(firstCycleDay));
+        // setNextPeriod(nextPeriodCycle(firstCycleDay));
+        setNextPeriod(() => {
+            return {
+                selected: nextPeriodCycle(firstCycleDay),
+                marked: markedNextPeriod(nextPeriodCycle(firstCycleDay)),
+            };
+        });
     };
 
     const postDay = async (day) => {
@@ -60,8 +107,9 @@ export default function CalendarScreen({ navigation }) {
     };
 
     const markedPeriod = (days) => {
+        //cette fonction stylise les jours selectionnés en paramètre
         const markedDates = {};
-        days.map((day) => {
+        days.sort().map((day) => {
             if (day === days[0] && days.length > 1) {
                 markedDates[day] = {
                     startingDay: true,
@@ -76,8 +124,6 @@ export default function CalendarScreen({ navigation }) {
             } else {
                 markedDates[day] = {
                     selected: true,
-                    startingDay: true,
-                    endingDay: true,
                     color: '#FF9A61',
                 };
             }
@@ -85,30 +131,49 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
-    const handleOnPressDay = (value) => {
+    const markedNextPeriod = (days) => {
+        const markedPeriod = {};
+        days.sort().map((day) => {
+            if (day === days[0] && days.length > 1) {
+                markedPeriod[day] = {
+                    startingDay: true,
+                    color: '#F8CFB8',
+                };
+            } else if (day === days[days.length - 1] && days.length > 1) {
+                markedPeriod[day] = {
+                    selected: true,
+                    endingDay: true,
+                    color: '#F8CFB8',
+                };
+            } else {
+                markedPeriod[day] = {
+                    selected: true,
+                    color: '#F8CFB8',
+                };
+            }
+        });
+        return markedPeriod;
+    };
+
+    const handleOnPressDay = async (value) => {
         const periodDay = value.dateString;
         if (selectedDays.selected.includes(periodDay)) {
-            deleteDay(periodDay);
-            const newSelected = selectedDays.selected.filter((day) => day !== periodDay);
-            setSelectedDays(() => {
-                return {
-                    selected: newSelected,
-                    marked: markedPeriod([...newSelected]),
-                };
-            });
+            await deleteDay(periodDay);
+            readPeriods();
         } else {
-            postDay(periodDay);
-            setSelectedDays((oldValues) => {
-                return {
-                    selected: [...oldValues.selected, periodDay],
-                    marked: markedPeriod([...oldValues.selected, periodDay]),
-                };
-            });
+            await postDay(periodDay);
+            readPeriods();
         }
     };
 
+    useEffect(() => {
+        readPeriods();
+    }, []);
+
     return (
         <View style={styles.container}>
+            {/* <Text>{JSON.stringify(nextPeriod.marked)}</Text>
+            <Text>{JSON.stringify(selectedDays.marked)}</Text> */}
             <CalendarList
                 pastScrollRange={6}
                 futureScrollRange={3}
@@ -124,7 +189,7 @@ export default function CalendarScreen({ navigation }) {
                 }}
                 onDayPress={(day) => handleOnPressDay(day)}
                 markingType={'period'}
-                markedDates={selectedDays.marked}
+                markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
             />
         </View>
     );
