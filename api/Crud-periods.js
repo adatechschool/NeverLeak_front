@@ -8,8 +8,7 @@ const getPeriodsDays = async (userId) => {
         .order('period_day', { ascending: true });
 
     console.log('error read = ', error);
-
-    return data;
+    return data.map((e) => e.period_day);
 };
 
 const postPeriodDay = async (userId, day) => {

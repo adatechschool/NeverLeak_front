@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { useState, useContext, useEffect } from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import { SessionContext } from '../Components/SessionContext';
+import { NextCycleContext } from '../Components/NextCycleContext';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
@@ -8,6 +11,8 @@ const screenWidth = Dimensions.get('window').width;
 console.log(screenWidth);
 
 export default function CycleScreen() {
+    const {nextCycle, setNextCycle} = useContext(NextCycleContext)
+    console.log({nextCycle})
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });

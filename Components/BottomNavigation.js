@@ -22,17 +22,6 @@ const BottomNavigation = () => {
             }}
         >
             <Tab.Screen
-                name="Cycle"
-                component={CycleScreen}
-                options={{
-                    tabBarLabel: 'Cycle',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="refresh-outline" color={color} size={30} />
-                    ),
-                }}
-            />
-            <Tab.Screen
                 name="Calendar"
                 component={CalendarScreen}
                 options={{
@@ -43,6 +32,19 @@ const BottomNavigation = () => {
                     ),
                 }}
             />
+
+            <Tab.Screen
+                name="Cycle"
+                component={CycleScreen}
+                options={{
+                    tabBarLabel: 'Cycle',
+                    tabBarLabelStyle: { padding: 5 },
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="refresh-outline" color={color} size={30} />
+                    ),
+                }}
+            />
+
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}
