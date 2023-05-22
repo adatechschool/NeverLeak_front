@@ -20,6 +20,7 @@ import Logo from '../assets/logo_neverleak.png';
 export default function Account() {
     const [loading, setLoading] = useState(true);
     const [pseudo, setPseudo] = useState('');
+    const [period_day, setPeriod] = useState('');
     const { session, setSession } = useContext(SessionContext);
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export default function Account() {
 
             if (data) {
                 setPseudo(data.pseudo);
+                setPeriod(data.period_day);
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -64,6 +66,43 @@ export default function Account() {
             };
 
             let { error } = await supabase.from('users').upsert(updates);
+
+            if (error) {
+                throw error;
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message);
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // const postDay = async (day) => {
+    //     const { data, error } = await supabase
+    //         .from('periods')
+    //         .insert([{ period_day: day, user_id: session.user.id }], { returning: 'minimal' });
+
+    //     if (data) {
+    //         setPeriod(data.period_day);
+    //     }
+
+    //     console.log('posts error =', error);
+    // };
+
+    async function updatePeriod({ period_day }) {
+        try {
+            setLoading(true);
+            if (!session?.user) throw new Error('No user on the session!');
+
+            const updates = {
+                created_at: new Date(),
+                period_day,
+                user_id: session?.user.id,
+            };
+
+            let { error } = await supabase.from('periods').upsert(updates);
 
             if (error) {
                 throw error;
@@ -100,7 +139,24 @@ export default function Account() {
                         onChangeText={(text) => setPseudo(text)}
                     />
 
-                    <Text style={styles.label}>Durée du cycle</Text>
+                    <Text style={styles.label}>Premier jour des dernières règles</Text>
+                    <TextInput
+                        style={styles.input}
+                        label="Règles"
+                        value={period_day || ''}
+                        placeholder="Premier jour des dernières règles"
+                        onChangeText={(text) => setPeriod(text)}
+                    />
+
+                    <Text style={styles.label}>Durée moyenne des règles</Text>
+                    <TextInput
+                        style={styles.input}
+                        label="Cycle"
+                        placeholder="Durée des règles"
+                        disabled
+                    />
+
+                    <Text style={styles.label}>Durée moyenne du cycle</Text>
                     <TextInput
                         style={styles.input}
                         label="Cycle"
@@ -113,6 +169,7 @@ export default function Account() {
                         title={loading ? 'Loading ...' : 'Update'}
                         onPress={() => {
                             updateProfile({ pseudo });
+                            updatePeriod({ period_day });
                             Toast.info('Profil modifié !');
                         }}
                         disabled={loading}
