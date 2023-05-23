@@ -66,7 +66,7 @@ const BottomNavigation = () => {
         >
             <Tab.Screen
                 name="Cycle"
-                component={CycleScreen}
+                // component={CycleScreen}
                 options={{
                     tabBarLabel: 'Cycle',
                     tabBarLabelStyle,
@@ -74,8 +74,9 @@ const BottomNavigation = () => {
                         <Ionicons name="refresh-outline" color={color} size={tabBarIconSize} />
                     ),
                 }}
-            />
-
+            >
+                {(props) => <CycleScreen {...props} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Calendar"
                 component={CalendarScreen}
