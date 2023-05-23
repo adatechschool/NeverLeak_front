@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { useState, useContext, useEffect } from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import { SessionContext } from '../Components/SessionContext';
+import { NextCycleContext } from '../Components/NextCycleContext';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
@@ -8,23 +11,25 @@ const screenWidth = Dimensions.get('window').width;
 console.log(screenWidth);
 
 export default function CycleScreen() {
+    const { nextCycle, setNextCycle } = useContext(NextCycleContext);
+    console.log({ nextCycle });
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
-    const calculateDaysBetweenDates = (startDate, endDate) => {
-        // Convert the start and end dates to UTC to avoid timezone-related issues
-        const startUtc = Date.UTC(
-            startDate.getFullYear(),
-            startDate.getMonth(),
-            startDate.getDate()
-        );
-        const endUtc = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-        // Calculate the number of milliseconds in a day
-        const millisecondsPerDay = 1000 * 60 * 60 * 24;
-        // Calculate the difference in days
-        const daysDifference = Math.floor((endUtc - startUtc) / millisecondsPerDay);
-        return daysDifference;
-    };
+    // const calculateDaysBetweenDates = (startDate, endDate) => {
+    //     // Convert the start and end dates to UTC to avoid timezone-related issues
+    //     const startUtc = Date.UTC(
+    //         startDate.getFullYear(),
+    //         startDate.getMonth(),
+    //         startDate.getDate()
+    //     );
+    //     const endUtc = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+    //     // Calculate the number of milliseconds in a day
+    //     const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    //     // Calculate the difference in days
+    //     const daysDifference = Math.floor((endUtc - startUtc) / millisecondsPerDay);
+    //     return daysDifference;
+    // };
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
     const startDate = new Date('2023-04-26');
