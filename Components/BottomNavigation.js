@@ -12,15 +12,23 @@ const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
     const deviceModel = Device.modelName;
-    console.log(deviceModel);
     let tabBarIconSize;
     let tabBarLabelStyle;
     let tabBarStyle;
 
     if (
+        deviceModel.includes('iPhone 14') ||
+        deviceModel.includes('iPhone 14 Pro Max') ||
+        deviceModel.includes('iPhone 14 Pro') ||
+        deviceModel.includes('iPhone 14 Plus') ||
+        deviceModel.includes('iPhone 13') ||
+        deviceModel.includes('iPhone 13 Pro') ||
+        deviceModel.includes('iPhone 13 Pro Max') ||
         deviceModel.includes('iPhone 13 mini') ||
         deviceModel.includes('iPhone 12') ||
-        deviceModel.includes('iPhone 14') ||
+        deviceModel.includes('iPhone 12 Pro Max') ||
+        deviceModel.includes('iPhone 12 Pro') ||
+        deviceModel.includes('iPhone 12 mini') ||
         deviceModel.includes('iPhone X')
     ) {
         tabBarIconSize = 23;
