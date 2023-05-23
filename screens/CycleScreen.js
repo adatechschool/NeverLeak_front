@@ -82,7 +82,7 @@ export default function CycleScreen({ navigation }) {
 
     return (
         <>
-            {nextCycle.firstday === '' ? (
+            {!nextCycle.firstday ? (
                 <WelcomeScreen navigation={navigation} />
             ) : (
                 <View style={styles.container}>

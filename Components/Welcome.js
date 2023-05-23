@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 export default function WelcomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.h1}>Bienvenue 'pseudo'</Text>
+            <Text style={styles.h1}>Bienvenue</Text>
             <Text style={styles.welcomeText}>
                 Ouvre le calendrier pour renseigner la date de tes dernières règles :
             </Text>

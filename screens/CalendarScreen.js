@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
@@ -15,7 +15,7 @@ export default function CalendarScreen() {
         selected: [],
         marked: {},
     });
-    // const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState('Not loaded');
 
     const readPeriodsDays = async () => {
         const periodsDaysList = await getPeriodsDays(session.user.id);
@@ -32,6 +32,7 @@ export default function CalendarScreen() {
                 marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
             };
         });
+        setIsLoading('Loaded');
     };
 
     const handleOnPressDay = async (event) => {
@@ -97,30 +98,34 @@ export default function CalendarScreen() {
     };
 
     useEffect(() => {
+        setIsLoading('Loading');
         readPeriodsDays();
     }, []);
 
     return (
         <View style={styles.container}>
-            {/* <Text>{JSON.stringify(nextPeriod.marked)}</Text>
-            <Text>{JSON.stringify(selectedDays.marked)}</Text> */}
-            <CalendarList
-                pastScrollRange={6}
-                futureScrollRange={3}
-                scrollEnabled={true}
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    height: 350,
-                }}
-                theme={{
-                    backgroundColor: '#FEF6D9',
-                    calendarBackground: '#FEF6D9',
-                }}
-                onDayPress={(day) => handleOnPressDay(day)}
-                markingType={'period'}
-                markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-            />
+            {isLoading === 'Loading' ? (
+                <Text>Ca charge !</Text>
+            ) : (
+                <CalendarList
+                    pastScrollRange={6}
+                    futureScrollRange={3}
+                    scrollEnabled={true}
+                    // displayLoadingIndicator={true}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: 'gray',
+                        height: 350,
+                    }}
+                    theme={{
+                        backgroundColor: '#FEF6D9',
+                        calendarBackground: '#FEF6D9',
+                    }}
+                    onDayPress={(day) => handleOnPressDay(day)}
+                    markingType={'period'}
+                    markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
+                />
+            )}
         </View>
     );
 }
