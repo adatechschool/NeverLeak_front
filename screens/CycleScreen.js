@@ -16,20 +16,20 @@ export default function CycleScreen() {
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
-    // const calculateDaysBetweenDates = (startDate, endDate) => {
-    //     // Convert the start and end dates to UTC to avoid timezone-related issues
-    //     const startUtc = Date.UTC(
-    //         startDate.getFullYear(),
-    //         startDate.getMonth(),
-    //         startDate.getDate()
-    //     );
-    //     const endUtc = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-    //     // Calculate the number of milliseconds in a day
-    //     const millisecondsPerDay = 1000 * 60 * 60 * 24;
-    //     // Calculate the difference in days
-    //     const daysDifference = Math.floor((endUtc - startUtc) / millisecondsPerDay);
-    //     return daysDifference;
-    // };
+    const calculateDaysBetweenDates = (startDate, endDate) => {
+        // Convert the start and end dates to UTC to avoid timezone-related issues
+        const startUtc = Date.UTC(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            startDate.getDate()
+        );
+        const endUtc = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+        // Calculate the number of milliseconds in a day
+        const millisecondsPerDay = 1000 * 60 * 60 * 24;
+        // Calculate the difference in days
+        const daysDifference = Math.floor((endUtc - startUtc) / millisecondsPerDay);
+        return daysDifference;
+    };
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
     const startDate = new Date('2023-04-26');

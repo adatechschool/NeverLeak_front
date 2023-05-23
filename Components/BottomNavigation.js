@@ -65,37 +65,25 @@ const BottomNavigation = () => {
             }}
         >
             <Tab.Screen
-                name="Calendar"
-                component={CalendarScreen}
+                name="Cycle"
+                component={CycleScreen}
                 options={{
-                    tabBarLabel: 'Calendrier',
-                    tabBarLabelStyle: { padding: 5 },
+                    tabBarLabel: 'Cycle',
+                    tabBarLabelStyle,
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="calendar-outline" color={color} size={30} />
+                        <Ionicons name="refresh-outline" color={color} size={tabBarIconSize} />
                     ),
                 }}
             />
 
             <Tab.Screen
-                name="Cycle"
-                component={CycleScreen}
+                name="Calendar"
+                component={CalendarScreen}
                 options={{
                     tabBarLabel: 'Calendrier',
                     tabBarLabelStyle,
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="calendar-outline" color={color} size={tabBarIconSize} />
-                    ),
-                }}
-            />
-
-            <Tab.Screen
-                name="Cycle"
-                component={CycleScreen}
-                options={{
-                    tabBarLabel: 'Cycle',
-                    tabBarLabelStyle: { padding: 5 },
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="refresh-outline" color={color} size={30} />
                     ),
                 }}
             />
