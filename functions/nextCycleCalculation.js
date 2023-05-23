@@ -13,8 +13,6 @@ const dateToString = (date) => {
     return year + '-' + month + '-' + day;
 };
 
-
- 
 const nextCycleCalculation = (firstday) => {
     let nextPeriodDays = [];
 
@@ -26,4 +24,4 @@ const nextCycleCalculation = (firstday) => {
     return nextPeriodDays;
 };
 
-export {nextCycleCalculation};
+export { nextCycleCalculation };

@@ -2,23 +2,21 @@ import { StyleSheet, View } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
-import { NextCycleContext } from '../Components/SessionContext';
+import { NextCycleContext } from '../Components/NextCycleContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
 
 export default function CalendarScreen({ navigation }) {
     const { session, setSession } = useContext(SessionContext);
-
+    const { nextCycle, setNextCycle } = useContext(NextCycleContext);
     const [selectedDays, setSelectedDays] = useState({
         selected: [],
         marked: {},
     });
-
     const [nextPeriod, setNextPeriod] = useState({
         selected: [],
         marked: {},
     });
-
     // const [isLoading, setIsLoading] = useState(false);
 
     const readPeriodsDays = async () => {
@@ -30,8 +28,18 @@ export default function CalendarScreen({ navigation }) {
                 marked: markedPeriod(periodsDaysList),
             };
         });
-        nextCycle(periodsDaysList[0]);
-        // setIsLoading(false);
+        setNextPeriod(() => {
+            return {
+                selected: nextCycleCalculation(periodsDaysList[0]),
+                marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
+            };
+        });
+        setNextCycle(() => {
+            return {
+                firstday: periodsDaysList[0],
+                nextCycle: nextCycleCalculation(periodsDaysList[0]),
+            };
+        });
     };
 
     const handleOnPressDay = async (event) => {
@@ -72,37 +80,6 @@ export default function CalendarScreen({ navigation }) {
         return markedDates;
     };
 
-    // const dateToString = (date) => {
-    //     const year = date.getFullYear().toString();
-    //     let month = (date.getMonth() + 1).toString();
-    //     let day = date.getDate().toString();
-
-    //     if (month <= 9) {
-    //         month = '0' + month;
-    //     }
-    //     if (day <= 9) {
-    //         day = '0' + day;
-    //     }
-
-    //     return year + '-' + month + '-' + day;
-    // };
-
-    // const nextCycle = (firstday) => {
-    //     let nextPeriodDays = [];
-
-    //     for (let i = 28; i < 33; i++) {
-    //         const firstDayObj = new Date(firstday);
-    //         const nextPeriodDay = new Date(firstDayObj.setDate(firstDayObj.getDate() + i));
-    //         nextPeriodDays.push(dateToString(nextPeriodDay));
-    //     }
-    //     setNextPeriod(() => {
-    //         return {
-    //             selected: nextPeriodDays,
-    //             marked: markedNextPeriod(nextPeriodDays),
-    //         };
-    //     });
-    // };
-
     const markedNextPeriod = (days) => {
         const markedPeriod = {};
         days.sort().map((day) => {
@@ -132,7 +109,6 @@ export default function CalendarScreen({ navigation }) {
     }, []);
 
     return (
-       
         <View style={styles.container}>
             {/* <Text>{JSON.stringify(nextPeriod.marked)}</Text>
             <Text>{JSON.stringify(selectedDays.marked)}</Text> */}
