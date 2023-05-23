@@ -7,7 +7,7 @@ import { NextCycleContext } from '../Components/NextCycleContext';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
-import WelcomeScreen from './WelcomeScreen';
+import WelcomeScreen from '../Components/Welcome';
 
 const screenWidth = Dimensions.get('window').width;
 console.log(screenWidth);
@@ -18,7 +18,7 @@ export default function CycleScreen({ navigation }) {
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
-    let number = null;
+    let number = 9;
 
     const calculateDaysBetweenDates = (startDate, endDate) => {
         // Convert the start and end dates to UTC to avoid timezone-related issues
@@ -36,7 +36,7 @@ export default function CycleScreen({ navigation }) {
     };
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
-    const startDate = new Date('2023-04-26');
+    const startDate = new Date(nextCycle.firstday);
     const endDate = new Date();
     const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
     const periodStart = 28 - daysBetweenDates;
