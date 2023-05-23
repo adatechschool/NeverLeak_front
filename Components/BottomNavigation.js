@@ -1,8 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as Device from 'expo-device';
 
-//Importer les routes (=screens)
+// Import the routes (=screens)
 import CalendarScreen from '../screens/CalendarScreen.js';
 import CycleScreen from '../screens/CycleScreen.js';
 import ProfileScreen from '../screens/ProfileScreen.js';
@@ -10,6 +11,48 @@ import ProfileScreen from '../screens/ProfileScreen.js';
 const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
+    const deviceModel = Device.modelName;
+    let tabBarIconSize;
+    let tabBarLabelStyle;
+    let tabBarStyle;
+
+    if (
+        deviceModel.includes('iPhone 14') ||
+        deviceModel.includes('iPhone 14 Pro Max') ||
+        deviceModel.includes('iPhone 14 Pro') ||
+        deviceModel.includes('iPhone 14 Plus') ||
+        deviceModel.includes('iPhone 13') ||
+        deviceModel.includes('iPhone 13 Pro') ||
+        deviceModel.includes('iPhone 13 Pro Max') ||
+        deviceModel.includes('iPhone 13 mini') ||
+        deviceModel.includes('iPhone 12') ||
+        deviceModel.includes('iPhone 12 Pro Max') ||
+        deviceModel.includes('iPhone 12 Pro') ||
+        deviceModel.includes('iPhone 12 mini') ||
+        deviceModel.includes('iPhone X')
+    ) {
+        tabBarIconSize = 23;
+        tabBarLabelStyle = {
+            padding: 0,
+            marginBottom: -18,
+        };
+        tabBarStyle = {
+            height: 60,
+            padding: 0,
+            backgroundColor: '#86C8BC',
+        };
+    } else {
+        tabBarIconSize = 30;
+        tabBarLabelStyle = {
+            padding: 5,
+        };
+        tabBarStyle = {
+            height: 60,
+            padding: 5,
+            backgroundColor: '#86C8BC',
+        };
+    }
+
     return (
         <Tab.Navigator
             activeColor="#FEF6D9"
@@ -17,7 +60,7 @@ const BottomNavigation = () => {
             screenOptions={{
                 tabBarActiveTintColor: '#FEF6D9',
                 tabBarInactiveTintColor: 'black',
-                tabBarStyle: { backgroundColor: '#86C8BC', height: 60, padding: 5 },
+                tabBarStyle,
                 headerShown: false,
             }}
         >
@@ -26,9 +69,9 @@ const BottomNavigation = () => {
                 component={CycleScreen}
                 options={{
                     tabBarLabel: 'Cycle',
-                    tabBarLabelStyle: { padding: 5 },
+                    tabBarLabelStyle,
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="refresh-outline" color={color} size={30} />
+                        <Ionicons name="refresh-outline" color={color} size={tabBarIconSize} />
                     ),
                 }}
             />
@@ -37,9 +80,9 @@ const BottomNavigation = () => {
                 component={CalendarScreen}
                 options={{
                     tabBarLabel: 'Calendrier',
-                    tabBarLabelStyle: { padding: 5 },
+                    tabBarLabelStyle,
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="calendar-outline" color={color} size={30} />
+                        <Ionicons name="calendar-outline" color={color} size={tabBarIconSize} />
                     ),
                 }}
             />
@@ -48,9 +91,9 @@ const BottomNavigation = () => {
                 component={ProfileScreen}
                 options={{
                     tabBarLabel: 'Profil',
-                    tabBarLabelStyle: { padding: 5 },
+                    tabBarLabelStyle,
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="person-outline" color={color} size={30} />
+                        <Ionicons name="person-outline" color={color} size={tabBarIconSize} />
                     ),
                 }}
             />
