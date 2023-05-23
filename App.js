@@ -10,9 +10,7 @@ import { supabase } from './supabase.js';
 import Auth from './screens/AuthScreen';
 import { SessionContext } from './Components/SessionContext';
 import { NextCycleContext } from './Components/NextCycleContext';
-import ToastManager, { Toast } from 'toastify-react-native';
-import { getPeriodsDays } from './api/Crud-periods.js';
-import { nextCycleCalculation } from './functions/nextCycleCalculation';
+import ToastManager from 'toastify-react-native';
 
 export default function App() {
     const [session, setSession] = useState(null);
@@ -29,18 +27,7 @@ export default function App() {
         supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
         });
-        createNextCycle();
     }, []);
-
-    const createNextCycle = async () => {
-        const periodsDaysList = await getPeriodsDays(session.user.id);
-        setNextCycle(() => {
-            return {
-                firstday: periodsDaysList[0],
-                nextCycle: nextCycleCalculation(periodsDaysList[0]),
-            };
-        });
-    };
 
     return (
         <SessionContext.Provider value={{ session, setSession }}>
