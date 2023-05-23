@@ -4,21 +4,42 @@ import { useState, useContext, useEffect } from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { SessionContext } from '../Components/SessionContext';
 import { NextCycleContext } from '../Components/NextCycleContext';
+import { getPeriodsDays } from '../api/Crud-periods';
+import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
 import WelcomeScreen from '../Components/Welcome';
 
-const screenWidth = Dimensions.get('window').width;
-console.log(screenWidth);
-
 export default function CycleScreen({ navigation }) {
+    const { session, setSession } = useContext(SessionContext);
     const { nextCycle, setNextCycle } = useContext(NextCycleContext);
-    console.log({ nextCycle });
+    const [daysLeft, setDaysLeft] = useState(0);
+    const [cyclePercentage, setCyclePercentage] = useState(null);
+    const [textContent, setTextContent] = useState('');
+    const [radius, setRadius] = useState(0);
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
-    let number = 9;
+
+    const handleTextContent = () => {
+        if (daysLeft == 1 || daysLeft == 0) {
+            setTextContent('jour avant les prochaines règles');
+        } else {
+            setTextContent('jours avant les prochaines règles');
+        }
+    };
+
+    const handleRadius = () => {
+        const screenWidth = Dimensions.get('window').width;
+        if (screenWidth <= 300) {
+            setRadius(150);
+        } else if (screenWidth > 300 && screenWidth < 400) {
+            setRadius(170);
+        } else if (screenWidth >= 400) {
+            setRadius(190);
+        }
+    };
 
     const calculateDaysBetweenDates = (startDate, endDate) => {
         // Convert the start and end dates to UTC to avoid timezone-related issues
@@ -35,47 +56,44 @@ export default function CycleScreen({ navigation }) {
         return daysDifference;
     };
 
+    const displayNextCycle = async () => {
+        const periodsDaysList = await getPeriodsDays(session.user.id);
+        setNextCycle(() => {
+            return {
+                firstday: periodsDaysList[0],
+                nextCycle: nextCycleCalculation(periodsDaysList[0]),
+            };
+        });
+        const startDate = new Date(periodsDaysList[0]);
+        const endDate = new Date();
+        const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
+        setDaysLeft(() => {
+            return 28 - daysBetweenDates;
+        });
+        handleTextContent();
+        setCyclePercentage((daysBetweenDates / 28) * 100);
+    };
+
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
-    const startDate = new Date(nextCycle.firstday);
-    const endDate = new Date();
-    const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
-    const periodStart = 28 - daysBetweenDates;
-
-    const value = (daysBetweenDates / 28) * 100;
-    let textDays = '';
-    if (periodStart == 1 || periodStart == 0) {
-        textDays = 'jour avant les prochaines règles';
-    } else {
-        textDays = 'jours avant les prochaines règles';
-    }
-
-    let radius = 0;
-    if (screenWidth <= 300) {
-        radius = 150;
-    } else if (screenWidth > 300 && screenWidth < 400) {
-        radius = 170;
-    } else if (screenWidth >= 400) {
-        radius = 190;
-    }
-
-    // console.log(daysBetweenDates);
+    useEffect(() => {
+        handleRadius();
+        displayNextCycle();
+    }, []);
 
     return (
         <>
-            {!number ? (
+            {nextCycle.firstday === '' ? (
                 <WelcomeScreen navigation={navigation} />
             ) : (
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.number}>{periodStart}</Text>
+                        <Text style={styles.number}>{daysLeft}</Text>
                         {/* <Text style={styles.days}>jours</Text> */}
-                        <Text style={styles.days}>{textDays}</Text>
+                        <Text style={styles.days}>{textContent}</Text>
                     </View>
                     <View style={styles.graphContainer}>
                         <CircularProgress
-                            value={value}
-                            // title={periodStart + ` jours avant les prochaines règles`}
-                            // subtitle={`Jour ` + daysBetweenDates + ` du cycle`}
+                            value={cyclePercentage}
                             showProgressValue={false}
                             radius={radius}
                             activeStrokeWidth={20} //vert

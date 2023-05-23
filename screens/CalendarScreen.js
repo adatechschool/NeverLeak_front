@@ -2,13 +2,11 @@ import { StyleSheet, View } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
-import { NextCycleContext } from '../Components/NextCycleContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
 
-export default function CalendarScreen({ navigation }) {
+export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
-    const { nextCycle, setNextCycle } = useContext(NextCycleContext);
     const [selectedDays, setSelectedDays] = useState({
         selected: [],
         marked: {},
@@ -32,12 +30,6 @@ export default function CalendarScreen({ navigation }) {
             return {
                 selected: nextCycleCalculation(periodsDaysList[0]),
                 marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
-            };
-        });
-        setNextCycle(() => {
-            return {
-                firstday: periodsDaysList[0],
-                nextCycle: nextCycleCalculation(periodsDaysList[0]),
             };
         });
     };

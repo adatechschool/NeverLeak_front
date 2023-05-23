@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
-import {
-    StyleSheet,
-    View,
-    Alert,
-    TouchableOpacity,
-    TextInput,
-    Image,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { SessionContext } from '../Components/SessionContext';
-// import { Session } from '@supabase/supabase-js';
+
 import { Toast } from 'toastify-react-native';
 
 import Logo from '../assets/logo_neverleak.png';
