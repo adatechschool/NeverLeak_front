@@ -58,29 +58,7 @@ export default function CycleScreen({ navigation }) {
     return (
         <>
             {!number ? (
-                <View style={styles.containerWelcome}>
-                    <Text style={styles.h1}>Bienvenue 'pseudo'</Text>
-                    <Text style={styles.welcomeText}>
-                        Ouvre le calendrier pour renseigner la date de tes dernières règles :
-                    </Text>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            navigation.navigate('Calendar');
-                        }}
-                    >
-                        <Text>Mon calendrier</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('Calendar');
-                        }}
-                        accessibilityLabel="Go to the calendar"
-                    >
-                        <Text style={styles.skipButton}>Skip</Text>
-                    </TouchableOpacity>
-                    {/* <StatusBar style="auto" /> */}
-                </View>
+                <WelcomeScreen navigation={navigation} />
             ) : (
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
