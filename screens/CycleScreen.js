@@ -1,16 +1,20 @@
 import React from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
+import WelcomeScreen from './WelcomeScreen';
+
 const screenWidth = Dimensions.get('window').width;
 console.log(screenWidth);
 
-export default function CycleScreen() {
+export default function CycleScreen({ navigation }) {
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
+    let number = null;
+
     const calculateDaysBetweenDates = (startDate, endDate) => {
         // Convert the start and end dates to UTC to avoid timezone-related issues
         const startUtc = Date.UTC(
@@ -32,7 +36,7 @@ export default function CycleScreen() {
     const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
     const periodStart = 28 - daysBetweenDates;
 
-    const value = (daysBetweenDates / 28) * 100 - 1.3;
+    const value = (daysBetweenDates / 28) * 100;
     let textDays = '';
     if (periodStart == 1 || periodStart == 0) {
         textDays = 'jour avant les prochaines règles';
@@ -53,33 +57,59 @@ export default function CycleScreen() {
 
     return (
         <>
-            <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.number}>{periodStart}</Text>
-                    {/* <Text style={styles.days}>jours</Text> */}
-                    <Text style={styles.days}>{textDays}</Text>
-                </View>
-                <View style={styles.graphContainer}>
-                    <CircularProgress
-                        value={value}
-                        // title={periodStart + ` jours avant les prochaines règles`}
-                        // subtitle={`Jour ` + daysBetweenDates + ` du cycle`}
-                        showProgressValue={false}
-                        radius={radius}
-                        activeStrokeWidth={20} //vert
-                        activeStrokeColor={'#FF9A61'}
-                        inActiveStrokeWidth={40} //gris
-                        progressValueStyle={{ fontWeight: '100', color: 'black' }}
-                        activeStrokeSecondaryColor="#FF9A61"
-                        inActiveStrokeColor="#ffdac4"
-                        duration={1000}
-                        dashedStrokeConfig={{
-                            count: 28,
-                            width: 50,
+            {!number ? (
+                <View style={styles.containerWelcome}>
+                    <Text style={styles.h1}>Bienvenue 'pseudo'</Text>
+                    <Text style={styles.welcomeText}>
+                        Ouvre le calendrier pour renseigner la date de tes dernières règles :
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            navigation.navigate('Calendar');
                         }}
-                    />
+                    >
+                        <Text>Mon calendrier</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('Calendar');
+                        }}
+                        accessibilityLabel="Go to the calendar"
+                    >
+                        <Text style={styles.skipButton}>Skip</Text>
+                    </TouchableOpacity>
+                    {/* <StatusBar style="auto" /> */}
                 </View>
-            </View>
+            ) : (
+                <View style={styles.container}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.number}>{periodStart}</Text>
+                        {/* <Text style={styles.days}>jours</Text> */}
+                        <Text style={styles.days}>{textDays}</Text>
+                    </View>
+                    <View style={styles.graphContainer}>
+                        <CircularProgress
+                            value={value}
+                            // title={periodStart + ` jours avant les prochaines règles`}
+                            // subtitle={`Jour ` + daysBetweenDates + ` du cycle`}
+                            showProgressValue={false}
+                            radius={radius}
+                            activeStrokeWidth={20} //vert
+                            activeStrokeColor={'#FF9A61'}
+                            inActiveStrokeWidth={40} //gris
+                            progressValueStyle={{ fontWeight: '100', color: 'black' }}
+                            activeStrokeSecondaryColor="#FF9A61"
+                            inActiveStrokeColor="#ffdac4"
+                            duration={1000}
+                            dashedStrokeConfig={{
+                                count: 28,
+                                width: 50,
+                            }}
+                        />
+                    </View>
+                </View>
+            )}
         </>
     );
 }
@@ -109,5 +139,35 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         color: '#86C8BC',
+    },
+    containerWelcome: {
+        flex: 1,
+        backgroundColor: '#86C8BC',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    h1: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#FEF6D9',
+        marginBottom: 20,
+    },
+    welcomeText: {
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    button: {
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        marginBottom: 20,
+        borderRadius: 20,
+        backgroundColor: '#FF9A61',
+        elevation: 5,
+    },
+    skipButton: {
+        color: 'grey',
+        fontStyle: 'italic',
     },
 });
