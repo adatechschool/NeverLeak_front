@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../supabase.js';
 import { StyleSheet, View, Alert, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Text } from 'react-native-elements';
-import LogoSmall from '../Components/Logos/LogoSmall';
 
 import { SessionContext } from '../Components/SessionContext';
 
 import { Toast } from 'toastify-react-native';
+
+import Logo from '../assets/logo_neverleak.png';
 
 export default function Account() {
     const [loading, setLoading] = useState(true);
@@ -70,7 +71,10 @@ export default function Account() {
 
     return (
         <>
-            <LogoSmall />
+            <View style={styles.logoContainer}>
+                <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                <Text style={styles.textLogo}>NeverLeak</Text>
+            </View>
             <View style={styles.bienvenue}>
                 <Text style={styles.h1}>Bienvenue {pseudo}</Text>
                 <View>
