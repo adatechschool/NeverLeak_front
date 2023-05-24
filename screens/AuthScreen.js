@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import { supabase } from '../supabase.js';
-// import Logo from '../assets/logo_neverleak.png';
-// import { useFonts } from 'expo-font';
-// import Alegreya from '../assets/fonts/Alegreya Bold.ttf';
+import Logo from '../assets/logo_neverleak.png';
 import { Toast } from 'toastify-react-native';
 import { TextInput } from 'react-native-paper';
 import Logo from '../Components/Logos/Logo.js';
 
 export default function Auth() {
-    // const [fontsLoaded] = useFonts({
-    //     'Alegreya Bold': Alegreya,
-    // });
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -43,11 +37,10 @@ export default function Auth() {
     return (
         <View style={styles.container}>
             <View style={styles.form}>
-                {/* <View style={styles.logoContainer}>
+                <View style={styles.logoContainer}>
                     <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
                     <Text style={styles.h1}>NeverLeak</Text>
-                </View> */}
-                <Logo />
+                </View>
                 <TextInput
                     style={styles.input}
                     leftIcon={{ type: 'font-awesome', name: 'envelope' }}
@@ -115,7 +108,6 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         marginBottom: 20,
-        fontFamily: 'Alegreya Bold',
     },
     logoContainer: {
         flexDirection: 'row',
