@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
@@ -15,7 +16,7 @@ export default function CalendarScreen() {
         selected: [],
         marked: {},
     });
-    const [isLoading, setIsLoading] = useState('Not loaded');
+    const [isLoading, setIsLoading] = useState(false);
 
     const readPeriodsDays = async () => {
         const periodsDaysList = await getPeriodsDays(session.user.id);
@@ -32,10 +33,11 @@ export default function CalendarScreen() {
                 marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
             };
         });
-        setIsLoading('Loaded');
+        setIsLoading(false);
     };
 
     const handleOnPressDay = async (event) => {
+        setIsLoading(true);
         const periodDay = event.dateString;
         if (selectedDays.selected.includes(periodDay)) {
             await deletePeriodDay(session.user.id, periodDay);
@@ -98,34 +100,36 @@ export default function CalendarScreen() {
     };
 
     useEffect(() => {
-        setIsLoading('Loading');
+        setIsLoading(true);
         readPeriodsDays();
     }, []);
 
     return (
         <View style={styles.container}>
-            {isLoading === 'Loading' ? (
-                <Text>Ca charge !</Text>
-            ) : (
-                <CalendarList
-                    pastScrollRange={6}
-                    futureScrollRange={3}
-                    scrollEnabled={true}
-                    // displayLoadingIndicator={true}
-                    style={{
-                        borderWidth: 1,
-                        borderColor: 'gray',
-                        height: 350,
-                    }}
-                    theme={{
-                        backgroundColor: '#FEF6D9',
-                        calendarBackground: '#FEF6D9',
-                    }}
-                    onDayPress={(day) => handleOnPressDay(day)}
-                    markingType={'period'}
-                    markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-                />
-            )}
+            <Spinner
+                visible={isLoading}
+                textContent={'Loading...'}
+                color={'#FF9A61'}
+                animation={'fade'}
+            />
+            <CalendarList
+                pastScrollRange={6}
+                futureScrollRange={3}
+                scrollEnabled={true}
+                // displayLoadingIndicator={true}
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                    height: 350,
+                }}
+                theme={{
+                    backgroundColor: '#FEF6D9',
+                    calendarBackground: '#FEF6D9',
+                }}
+                onDayPress={(day) => handleOnPressDay(day)}
+                markingType={'period'}
+                markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
+            />
         </View>
     );
 }
@@ -136,5 +140,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FEF6D9',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    spinnerTextStyle: {
+        color: '#FFF',
     },
 });
