@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { SessionContext } from '../Components/SessionContext';
 import { NextCycleContext } from '../Components/NextCycleContext';
 import { getPeriodsDays } from '../api/Crud-periods';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { useIsFocused } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
@@ -19,6 +20,7 @@ export default function CycleScreen({ navigation }) {
     const [cyclePercentage, setCyclePercentage] = useState(null);
     const [textContent, setTextContent] = useState('');
     const [radius, setRadius] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
@@ -59,7 +61,7 @@ export default function CycleScreen({ navigation }) {
         return daysDifference;
     };
 
-    const displayNextCycle = async () => {
+    const displayNextCycle = useCallback(async () => {
         const periodsDaysList = await getPeriodsDays(session.user.id);
         setNextCycle(() => {
             return {
@@ -75,47 +77,61 @@ export default function CycleScreen({ navigation }) {
         });
         handleTextContent();
         setCyclePercentage((daysBetweenDates / 28) * 100);
-    };
+        setIsLoading(false);
+    }, []);
 
     // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
     useEffect(() => {
+        setIsLoading(true);
         handleRadius();
         displayNextCycle();
     }, [isFocused]);
-
-    console.log({ daysLeft });
-
+    if (isLoading) {
+        return (
+            <>
+                <Spinner
+                    visible={true}
+                    textContent={'chargement... 🫠'}
+                    color={'#FF9A61'}
+                    animation={'fade'}
+                    overlayColor={'#FEF6D9'}
+                />
+            </>
+        );
+    }
     return (
         <>
-            {!nextCycle.firstday ? (
-                <WelcomeScreen navigation={navigation} />
-            ) : (
-                <View style={styles.container}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.number}>{daysLeft}</Text>
-                        {/* <Text style={styles.days}>jours</Text> */}
-                        <Text style={styles.days}>{textContent}</Text>
+            <View style={styles.container}>
+                {!nextCycle.firstday ? (
+                    <WelcomeScreen navigation={navigation} />
+                ) : (
+                    <View style={styles.container}>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.number}>{daysLeft}</Text>
+                            {/* <Text style={styles.days}>jours</Text> */}
+                            <Text style={styles.days}>{textContent}</Text>
+                        </View>
+                        <View style={styles.graphContainer}>
+                            <CircularProgress
+                                value={cyclePercentage}
+                                showProgressValue={false}
+                                radius={radius}
+                                activeStrokeWidth={20} //vert
+                                activeStrokeColor={'#FF9A61'}
+                                inActiveStrokeWidth={40} //gris
+                                progressValueStyle={{ fontWeight: '100', color: 'black' }}
+                                activeStrokeSecondaryColor="#FF9A61"
+                                inActiveStrokeColor="#ffdac4"
+                                duration={1000}
+                                dashedStrokeConfig={{
+                                    count: 28,
+                                    width: 50,
+                                }}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.graphContainer}>
-                        <CircularProgress
-                            value={cyclePercentage}
-                            showProgressValue={false}
-                            radius={radius}
-                            activeStrokeWidth={20} //vert
-                            activeStrokeColor={'#FF9A61'}
-                            inActiveStrokeWidth={40} //gris
-                            progressValueStyle={{ fontWeight: '100', color: 'black' }}
-                            activeStrokeSecondaryColor="#FF9A61"
-                            inActiveStrokeColor="#ffdac4"
-                            duration={1000}
-                            dashedStrokeConfig={{
-                                count: 28,
-                                width: 50,
-                            }}
-                        />
-                    </View>
-                </View>
-            )}
+                )}
+            </View>
         </>
     );
 }

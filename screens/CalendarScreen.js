@@ -126,7 +126,7 @@ export default function CalendarScreen() {
             <View style={{ height: 120 }} />
             <Spinner
                 visible={isLoading}
-                textContent={'Loading...'}
+                textContent={'chargement...'}
                 color={'#FF9A61'}
                 animation={'fade'}
                 textStyle={styles.spinnerTextStyle}
@@ -143,7 +143,7 @@ export default function CalendarScreen() {
                     backgroundColor: '#FEF6D9',
                     calendarBackground: '#FEF6D9',
                 }}
-                onDayPress={(day) => handleOnPressDay(day)}
+                onDayPress={handleOnPressDay}
                 markingType={'period'}
                 markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
             />
