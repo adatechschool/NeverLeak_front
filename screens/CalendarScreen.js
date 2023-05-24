@@ -1,9 +1,10 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, StatusBarStyle } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
+import { Header } from 'react-native-elements';
 
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
@@ -121,6 +122,7 @@ export default function CalendarScreen() {
 
     return (
         <View style={styles.container}>
+            <View style={{ height: 120 }} />
             {isLoading === 'Loading' ? (
                 <Text>Ca charge !</Text>
             ) : (
