@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
+import { Alert, StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import { supabase } from '../supabase.js';
 import Logo from '../assets/logo_neverleak.png';
 import { Toast } from 'toastify-react-native';
-// import { TextInput } from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 
 export default function Auth() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const [passwordVisible, setPasswordVisible] = useState(true);
+    const [passwordVisible, setPasswordVisible] = useState(true)
 
     async function signInWithEmail() {
         setLoading(true);
@@ -43,7 +42,6 @@ export default function Auth() {
                 </View>
                 <TextInput
                     style={styles.input}
-                    label="Email"
                     leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
                     value={email}
@@ -52,20 +50,20 @@ export default function Auth() {
                 />
                 <TextInput
                     style={styles.input}
-                    label="Password"
                     leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
-                    secureTextEntry={true}
+                    // secureTextEntry={true}
+                    secureTextEntry={passwordVisible}
+                    right={
+                    <TextInput.Icon
+                        icon={passwordVisible ? 'eye' : 'eye-off'}
+                        onPress={()=> setPasswordVisible (!passwordVisible)}
+                    />
+                        }
                     placeholder="password"
                     autoCapitalize={'none'}
-                    // right={
-                    //     <TextInput.Icon
-                    //         name={passwordVisible ? 'eye' : 'eye-off'}
-                    //         onPress={() => setPasswordVisible(passwordVisible)}
-                    //     />
-                    // }
-                />
+                  />
                 <View style={styles.passwordView}>
                     <Text style={styles.passwordText}>
                         The password must contain at least 8 characters, including one upper case,
