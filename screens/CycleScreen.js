@@ -1,16 +1,16 @@
-import React from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, Text, Dimensions, Image } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { SessionContext } from '../Components/SessionContext';
 import { NextCycleContext } from '../Components/NextCycleContext';
 import { getPeriodsDays } from '../api/Crud-periods';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { useIsFocused } from '@react-navigation/native';
+import WelcomeScreen from '../Components/Welcome';
+import Logo from '../assets/logo_neverleak.png';
+
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
-
-import WelcomeScreen from '../Components/Welcome';
 
 export default function CycleScreen({ navigation }) {
     const { session, setSession } = useContext(SessionContext);
@@ -19,19 +19,13 @@ export default function CycleScreen({ navigation }) {
     const [cyclePercentage, setCyclePercentage] = useState(null);
     const [textContent, setTextContent] = useState('');
     const [radius, setRadius] = useState(0);
+    const [periodDuration, setPeriodDuration] = useState(28);
+
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
 
     const isFocused = useIsFocused();
-
-    const handleTextContent = () => {
-        if (daysLeft == 1 || daysLeft == 0) {
-            setTextContent('jour avant les prochaines règles');
-        } else {
-            setTextContent('jours avant les prochaines règles');
-        }
-    };
 
     const handleRadius = () => {
         const screenWidth = Dimensions.get('window').width;
@@ -67,23 +61,33 @@ export default function CycleScreen({ navigation }) {
                 nextCycle: nextCycleCalculation(periodsDaysList[0]),
             };
         });
+
         const startDate = new Date(periodsDaysList[0]);
         const endDate = new Date();
         const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
-        setDaysLeft(() => {
-            return 28 - daysBetweenDates;
-        });
-        handleTextContent();
-        setCyclePercentage((daysBetweenDates / 28) * 100);
+
+        const handleChanges = () => {
+            if (daysBetweenDates > periodDuration) {
+                setTextContent('jours de retard');
+                setDaysLeft(daysBetweenDates - periodDuration);
+                setCyclePercentage((periodDuration / daysBetweenDates) * 100);
+            } else if (daysLeft == 1 || daysLeft == 0) {
+                setTextContent('jour avant les prochaines règles');
+            } else {
+                setTextContent('jours avant les prochaines règles');
+                setDaysLeft(periodDuration - daysBetweenDates);
+                setCyclePercentage((daysBetweenDates / periodDuration) * 100);
+            }
+        };
+        handleChanges();
     };
 
-    // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
     useEffect(() => {
         handleRadius();
         displayNextCycle();
     }, [isFocused]);
 
-    console.log({ daysLeft });
+    // console.log({ daysLeft });
 
     return (
         <>
@@ -91,6 +95,10 @@ export default function CycleScreen({ navigation }) {
                 <WelcomeScreen navigation={navigation} />
             ) : (
                 <View style={styles.container}>
+                    <View style={styles.logoContainer}>
+                        <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                        <Text style={styles.textLogo}>NeverLeak</Text>
+                    </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.number}>{daysLeft}</Text>
                         {/* <Text style={styles.days}>jours</Text> */}
@@ -101,15 +109,15 @@ export default function CycleScreen({ navigation }) {
                             value={cyclePercentage}
                             showProgressValue={false}
                             radius={radius}
-                            activeStrokeWidth={20} //vert
+                            activeStrokeWidth={20}
                             activeStrokeColor={'#FF9A61'}
-                            inActiveStrokeWidth={40} //gris
+                            inActiveStrokeWidth={40}
                             progressValueStyle={{ fontWeight: '100', color: 'black' }}
                             activeStrokeSecondaryColor="#FF9A61"
                             inActiveStrokeColor="#ffdac4"
                             duration={1000}
                             dashedStrokeConfig={{
-                                count: 28,
+                                count: { periodDuration },
                                 width: 50,
                             }}
                         />
@@ -175,5 +183,21 @@ const styles = StyleSheet.create({
     skipButton: {
         color: 'grey',
         fontStyle: 'italic',
+    },
+    logoContainer: {
+        backgroundColor: '#FEF6D9',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 30,
+    },
+    logo: {
+        width: 20,
+        height: 25,
+        marginRight: 10,
+    },
+    textLogo: {
+        fontSize: 18,
+        marginTop: 5,
     },
 });
