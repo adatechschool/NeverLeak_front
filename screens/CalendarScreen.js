@@ -111,6 +111,7 @@ export default function CalendarScreen() {
                 textContent={'Loading...'}
                 color={'#FF9A61'}
                 animation={'fade'}
+                textStyle={styles.spinnerTextStyle}
             />
             <CalendarList
                 pastScrollRange={6}
