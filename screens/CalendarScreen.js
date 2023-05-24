@@ -6,6 +6,7 @@ import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
     const [selectedDays, setSelectedDays] = useState({
@@ -149,6 +150,27 @@ export default function CalendarScreen() {
                 markingType={'period'}
                 markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
             />
+            <View style={{ height: 120 }} />
+            {isLoading === 'Loading' ? (
+                <Text>Ca charge !</Text>
+            ) : (
+                <CalendarList
+                    pastScrollRange={6}
+                    futureScrollRange={3}
+                    scrollEnabled={true}
+                    // displayLoadingIndicator={true}
+                    style={{
+                        height: 350,
+                    }}
+                    theme={{
+                        backgroundColor: '#FEF6D9',
+                        calendarBackground: '#FEF6D9',
+                    }}
+                    onDayPress={(day) => handleOnPressDay(day)}
+                    markingType={'period'}
+                    markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
+                />
+            )}
         </View>
     );
 }
