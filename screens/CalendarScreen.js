@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, StatusBarStyle } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
@@ -123,6 +123,7 @@ export default function CalendarScreen() {
 
     return (
         <View style={styles.container}>
+             <View style={{ height: 120 }} />
             <Spinner
                 visible={isLoading}
                 textContent={'Loading...'}
