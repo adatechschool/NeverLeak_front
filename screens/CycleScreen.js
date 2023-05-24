@@ -8,7 +8,11 @@ import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { useIsFocused } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import WelcomeScreen from '../Components/Welcome';
-import LogoSmall from '../Components/Logos/LogoSmall';
+// import Logo from '../assets/logo_neverleak.png';
+import LogoSmall from '../Components/Logos/LogoSmall.js';
+
+// import { useFonts } from '@expo-google-fonts/nunito';
+// import * as Font from 'expo-font';
 
 export default function CycleScreen({ navigation }) {
     const { session, setSession } = useContext(SessionContext);
@@ -104,10 +108,11 @@ export default function CycleScreen({ navigation }) {
             ) : (
                 <View style={styles.container}>
                     <View>
-                        <View style={styles.logoContainer}>
+                        {/* <View style={styles.logoContainer}>
                             <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
                             <Text style={styles.textLogo}>NeverLeak</Text>
-                        </View>
+                        </View> */}
+                        <LogoSmall />
                     </View>
                     <View style={styles.cycleContainer}>
                         <View style={styles.textContainer}>
