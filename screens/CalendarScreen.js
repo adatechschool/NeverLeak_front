@@ -137,9 +137,7 @@ export default function CalendarScreen() {
                 futureScrollRange={3}
                 scrollEnabled={true}
                 // displayLoadingIndicator={true}
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
+                style={{                    
                     height: 350,
                 }}
                 theme={{
@@ -149,28 +147,8 @@ export default function CalendarScreen() {
                 onDayPress={(day) => handleOnPressDay(day)}
                 markingType={'period'}
                 markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-            />
-            <View style={{ height: 120 }} />
-            {isLoading === 'Loading' ? (
-                <Text>Ca charge !</Text>
-            ) : (
-                <CalendarList
-                    pastScrollRange={6}
-                    futureScrollRange={3}
-                    scrollEnabled={true}
-                    // displayLoadingIndicator={true}
-                    style={{
-                        height: 350,
-                    }}
-                    theme={{
-                        backgroundColor: '#FEF6D9',
-                        calendarBackground: '#FEF6D9',
-                    }}
-                    onDayPress={(day) => handleOnPressDay(day)}
-                    markingType={'period'}
-                    markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-                />
-            )}
+            />           
+           
         </View>
     );
 }
