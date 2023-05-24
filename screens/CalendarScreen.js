@@ -57,6 +57,9 @@ export default function CalendarScreen() {
                     markedDates[day] = {
                         startingDay: true,
                         color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
                     };
                 } else if (day === days[days.length - 1] && days.length > 1) {
                     markedDates[day] = {
@@ -82,6 +85,9 @@ export default function CalendarScreen() {
                 markedPeriod[day] = {
                     startingDay: true,
                     color: '#F8CFB8',
+                    customTextStyle: {
+                        color: '#FFFFFF',
+                    },
                 };
             } else if (day === days[days.length - 1] && days.length > 1) {
                 markedPeriod[day] = {
