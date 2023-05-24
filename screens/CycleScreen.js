@@ -6,6 +6,7 @@ import { SessionContext } from '../Components/SessionContext';
 import { NextCycleContext } from '../Components/NextCycleContext';
 import { getPeriodsDays } from '../api/Crud-periods';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
+import { useIsFocused } from '@react-navigation/native';
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
 
@@ -21,6 +22,8 @@ export default function CycleScreen({ navigation }) {
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
+
+    const isFocused = useIsFocused();
 
     const handleTextContent = () => {
         if (daysLeft == 1 || daysLeft == 0) {
@@ -78,7 +81,9 @@ export default function CycleScreen({ navigation }) {
     useEffect(() => {
         handleRadius();
         displayNextCycle();
-    }, []);
+    }, [isFocused]);
+
+    console.log({ daysLeft });
 
     return (
         <>
