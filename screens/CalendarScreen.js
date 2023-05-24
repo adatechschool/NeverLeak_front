@@ -65,6 +65,17 @@ export default function CalendarScreen() {
                         endingDay: true,
                         color: '#FF9A61',
                     };
+                } else if (day === days[0] && days.length === 1) {
+                    markedDates[day] = {
+                        //selected: true,
+                        disabled: true,
+                        startingDay: true,
+                        endingDay: true,
+                        color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
+                    };
                 } else {
                     markedDates[day] = {
                         selected: true,
