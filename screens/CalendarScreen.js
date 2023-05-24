@@ -137,8 +137,6 @@ export default function CalendarScreen() {
                 scrollEnabled={true}
                 // displayLoadingIndicator={true}
                 style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
                     height: 350,
                 }}
                 theme={{
