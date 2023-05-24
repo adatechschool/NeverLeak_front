@@ -3,11 +3,14 @@ import { Alert, StyleSheet, View, TextInput, TouchableOpacity, Text, Image } fro
 import { supabase } from '../supabase.js';
 import Logo from '../assets/logo_neverleak.png';
 import { Toast } from 'toastify-react-native';
+// import { TextInput } from 'react-native-paper';
 
 export default function Auth() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const [passwordVisible, setPasswordVisible] = useState(true);
 
     async function signInWithEmail() {
         setLoading(true);
@@ -56,6 +59,12 @@ export default function Auth() {
                     secureTextEntry={true}
                     placeholder="password"
                     autoCapitalize={'none'}
+                    // right={
+                    //     <TextInput.Icon
+                    //         name={passwordVisible ? 'eye' : 'eye-off'}
+                    //         onPress={() => setPasswordVisible(passwordVisible)}
+                    //     />
+                    // }
                 />
                 <View style={styles.passwordView}>
                     <Text style={styles.passwordText}>
