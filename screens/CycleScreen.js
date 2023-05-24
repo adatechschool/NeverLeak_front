@@ -8,10 +8,11 @@ import { getPeriodsDays } from '../api/Crud-periods';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { useIsFocused } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import WelcomeScreen from '../Components/Welcome';
+import Logo from '../assets/logo_neverleak.png';
+
 // import { useFonts } from '@expo-google-fonts/nunito';
 // import * as Font from 'expo-font';
-
-import WelcomeScreen from '../Components/Welcome';
 
 export default function CycleScreen({ navigation }) {
     const { session, setSession } = useContext(SessionContext);
@@ -21,19 +22,13 @@ export default function CycleScreen({ navigation }) {
     const [textContent, setTextContent] = useState('');
     const [radius, setRadius] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [periodDuration, setPeriodDuration] = useState(28);
+
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
 
     const isFocused = useIsFocused();
-
-    const handleTextContent = () => {
-        if (daysLeft == 1 || daysLeft == 0) {
-            setTextContent('jour avant les prochaines règles');
-        } else {
-            setTextContent('jours avant les prochaines règles');
-        }
-    };
 
     const handleRadius = () => {
         const screenWidth = Dimensions.get('window').width;
@@ -69,18 +64,29 @@ export default function CycleScreen({ navigation }) {
                 nextCycle: nextCycleCalculation(periodsDaysList[0]),
             };
         });
+
         const startDate = new Date(periodsDaysList[0]);
         const endDate = new Date();
         const daysBetweenDates = calculateDaysBetweenDates(startDate, endDate);
-        setDaysLeft(() => {
-            return 28 - daysBetweenDates;
-        });
-        handleTextContent();
-        setCyclePercentage((daysBetweenDates / 28) * 100);
+
+        const handleChanges = () => {
+            if (daysBetweenDates > periodDuration) {
+                setTextContent('jours de retard');
+                setDaysLeft(daysBetweenDates - periodDuration);
+                setCyclePercentage((periodDuration / daysBetweenDates) * 100);
+            } else if (daysLeft == 1 || daysLeft == 0) {
+                setTextContent('jour avant les prochaines règles');
+            } else {
+                setTextContent('jours avant les prochaines règles');
+                setDaysLeft(periodDuration - daysBetweenDates);
+                setCyclePercentage((daysBetweenDates / periodDuration) * 100);
+            }
+        };
+        handleChanges();
+
         setIsLoading(false);
     }, []);
 
-    // Utilisation de la fonction pour calculer le nombre de jours entre deux dates
     useEffect(() => {
         setIsLoading(true);
         handleRadius();
@@ -191,5 +197,21 @@ const styles = StyleSheet.create({
     skipButton: {
         color: 'grey',
         fontStyle: 'italic',
+    },
+    logoContainer: {
+        backgroundColor: '#FEF6D9',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 30,
+    },
+    logo: {
+        width: 20,
+        height: 25,
+        marginRight: 10,
+    },
+    textLogo: {
+        fontSize: 18,
+        marginTop: 5,
     },
 });
