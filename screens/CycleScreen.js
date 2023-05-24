@@ -107,11 +107,17 @@ export default function CycleScreen({ navigation }) {
     }
     return (
         <>
-            <View style={styles.container}>
-                {!nextCycle.firstday ? (
-                    <WelcomeScreen navigation={navigation} />
-                ) : (
-                    <View style={styles.container}>
+            {!nextCycle.firstday ? (
+                <WelcomeScreen navigation={navigation} />
+            ) : (
+                <View style={styles.container}>
+                    <View>
+                        <View style={styles.logoContainer}>
+                            <Image source={Logo} style={styles.logo} resizeMode="contain"></Image>
+                            <Text style={styles.textLogo}>NeverLeak</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cycleContainer}>
                         <View style={styles.textContainer}>
                             <Text style={styles.number}>{daysLeft}</Text>
                             {/* <Text style={styles.days}>jours</Text> */}
@@ -122,22 +128,22 @@ export default function CycleScreen({ navigation }) {
                                 value={cyclePercentage}
                                 showProgressValue={false}
                                 radius={radius}
-                                activeStrokeWidth={20} //vert
+                                activeStrokeWidth={20}
                                 activeStrokeColor={'#FF9A61'}
-                                inActiveStrokeWidth={40} //gris
+                                inActiveStrokeWidth={40}
                                 progressValueStyle={{ fontWeight: '100', color: 'black' }}
                                 activeStrokeSecondaryColor="#FF9A61"
                                 inActiveStrokeColor="#ffdac4"
                                 duration={1000}
                                 dashedStrokeConfig={{
-                                    count: 28,
+                                    count: { periodDuration },
                                     width: 50,
                                 }}
                             />
                         </View>
                     </View>
-                )}
-            </View>
+                </View>
+            )}
         </>
     );
 }
@@ -147,6 +153,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FEF6D9',
+    },
+    cycleContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'relative',
     },
     textContainer: {
