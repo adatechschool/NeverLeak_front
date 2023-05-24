@@ -123,7 +123,7 @@ export default function CalendarScreen() {
 
     return (
         <View style={styles.container}>
-             <View style={{ height: 120 }} />
+            <View style={{ height: 120 }} />
             <Spinner
                 visible={isLoading}
                 textContent={'Loading...'}
