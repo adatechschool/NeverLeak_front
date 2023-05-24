@@ -6,6 +6,7 @@ import { nextCycleCalculation } from '../functions/nextCycleCalculation';
 import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
     const [selectedDays, setSelectedDays] = useState({
@@ -57,12 +58,26 @@ export default function CalendarScreen() {
                     markedDates[day] = {
                         startingDay: true,
                         color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
                     };
                 } else if (day === days[days.length - 1] && days.length > 1) {
                     markedDates[day] = {
                         selected: true,
                         endingDay: true,
                         color: '#FF9A61',
+                    };
+                } else if (day === days[0] && days.length === 1) {
+                    markedDates[day] = {
+                        //selected: true,
+                        disabled: true,
+                        startingDay: true,
+                        endingDay: true,
+                        color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
                     };
                 } else {
                     markedDates[day] = {
@@ -82,6 +97,9 @@ export default function CalendarScreen() {
                 markedPeriod[day] = {
                     startingDay: true,
                     color: '#F8CFB8',
+                    customTextStyle: {
+                        color: '#FFFFFF',
+                    },
                 };
             } else if (day === days[days.length - 1] && days.length > 1) {
                 markedPeriod[day] = {
@@ -106,6 +124,7 @@ export default function CalendarScreen() {
 
     return (
         <View style={styles.container}>
+             <View style={{ height: 120 }} />
             <Spinner
                 visible={isLoading}
                 textContent={'Loading...'}
@@ -118,9 +137,7 @@ export default function CalendarScreen() {
                 futureScrollRange={3}
                 scrollEnabled={true}
                 // displayLoadingIndicator={true}
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
+                style={{                    
                     height: 350,
                 }}
                 theme={{
@@ -130,7 +147,8 @@ export default function CalendarScreen() {
                 onDayPress={(day) => handleOnPressDay(day)}
                 markingType={'period'}
                 markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-            />
+            />           
+           
         </View>
     );
 }
