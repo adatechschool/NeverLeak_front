@@ -20,7 +20,7 @@ export default function CycleScreen({ navigation }) {
     const [cyclePercentage, setCyclePercentage] = useState(null);
     const [textContent, setTextContent] = useState('');
     const [radius, setRadius] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     // const [fontsLoaded] = useFonts({
     //     'Nunito-Regular': require('@expo-google-fonts/nunito'),
     // });
