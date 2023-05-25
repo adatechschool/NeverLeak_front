@@ -1,78 +1,158 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { SessionContext } from '../Components/SessionContext';
+import { nextCycleCalculation } from '../functions/nextCycleCalculation';
+import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function CalendarScreen({ navigation }) {
+
+export default function CalendarScreen() {
+    const { session, setSession } = useContext(SessionContext);
     const [selectedDays, setSelectedDays] = useState({
         selected: [],
         marked: {},
     });
+    const [nextPeriod, setNextPeriod] = useState({
+        selected: [],
+        marked: {},
+    });
+    const [isLoading, setIsLoading] = useState(false);
 
-    const markedPeriod = (days) => {
-        const markedDates = {};
-        days.map((day) => {
-            if (day === days[0] && days.length > 1) {
-                markedDates[day] = {
-                    startingDay: true,
-                    color: '#FF9A61',
-                };
-            } else if (day === days[days.length - 1] && days.length > 1) {
-                markedDates[day] = {
-                    selected: true,
-                    endingDay: true,
-                    color: '#FF9A61',
-                };
-            } else {
-                markedDates[day] = {
-                    selected: true,
-                    startingDay: true,
-                    endingDay: true,
-                    color: '#FF9A61',
-                };
-            }
+    const readPeriodsDays = async () => {
+        const periodsDaysList = await getPeriodsDays(session.user.id);
+
+        setSelectedDays(() => {
+            return {
+                selected: periodsDaysList,
+                marked: markedPeriod(periodsDaysList),
+            };
         });
-        return markedDates;
+        setNextPeriod(() => {
+            return {
+                selected: nextCycleCalculation(periodsDaysList[0]),
+                marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
+            };
+        });
+        setIsLoading(false);
     };
 
-    const handleOnPressDay = (value) => {
-        const periodDay = value.dateString;
+    const handleOnPressDay = async (event) => {
+        setIsLoading(true);
+        const periodDay = event.dateString;
         if (selectedDays.selected.includes(periodDay)) {
-            const newSelected = selectedDays.selected.filter((day) => day !== periodDay);
-            setSelectedDays(() => {
-                return {
-                    selected: newSelected,
-                    marked: markedPeriod([...newSelected]),
-                };
-            });
+            await deletePeriodDay(session.user.id, periodDay);
+            readPeriodsDays();
         } else {
-            setSelectedDays((oldValues) => {
-                return {
-                    selected: [...oldValues.selected, periodDay],
-                    marked: markedPeriod([...oldValues.selected, periodDay]),
-                };
-            });
+            await postPeriodDay(session.user.id, periodDay);
+            readPeriodsDays();
         }
     };
 
+    const markedPeriod = (days) => {
+        //cette fonction stylise les jours selectionnés en paramètre
+        const markedDates = {};
+        if (days.length > 0) {
+            days.map((day) => {
+                if (day === days[0] && days.length > 1) {
+                    markedDates[day] = {
+                        startingDay: true,
+                        color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
+                    };
+                } else if (day === days[days.length - 1] && days.length > 1) {
+                    markedDates[day] = {
+                        selected: true,
+                        endingDay: true,
+                        color: '#FF9A61',
+                    };
+                } else if (day === days[0] && days.length === 1) {
+                    markedDates[day] = {
+                        //selected: true,
+                        disabled: true,
+                        startingDay: true,
+                        endingDay: true,
+                        color: '#FF9A61',
+                        customTextStyle: {
+                            color: '#FFFFFF',
+                        },
+                    };
+                } else {
+                    markedDates[day] = {
+                        selected: true,
+                        color: '#FF9A61',
+                    };
+                }
+            });
+        }
+        return markedDates;
+    };
+
+    const markedNextPeriod = (days) => {
+        const markedPeriod = {};
+        days.sort().map((day) => {
+            if (day === days[0] && days.length > 1) {
+                markedPeriod[day] = {
+                    startingDay: true,
+                    color: '#F8CFB8',
+                    customTextStyle: {
+                        color: '#FFFFFF',
+                    },
+                };
+            } else if (day === days[days.length - 1] && days.length > 1) {
+                markedPeriod[day] = {
+                    selected: true,
+                    endingDay: true,
+                    color: '#F8CFB8',
+                };
+            } else {
+                markedPeriod[day] = {
+                    selected: true,
+                    color: '#F8CFB8',
+                };
+            }
+        });
+        return markedPeriod;
+    };
+
+    useEffect(() => {
+        setIsLoading(true);
+        readPeriodsDays();
+    }, []);
+
     return (
         <View style={styles.container}>
+
+            <View style={{ height: 120 }} />
+
+            <Spinner
+                visible={isLoading}
+                textContent={'chargement...'}
+                color={'#FF9A61'}
+                animation={'fade'}
+                textStyle={styles.spinnerTextStyle}
+            />
             <CalendarList
                 pastScrollRange={6}
                 futureScrollRange={3}
                 scrollEnabled={true}
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
+                // displayLoadingIndicator={true}
+
+                style={{                    
+
                     height: 350,
                 }}
                 theme={{
                     backgroundColor: '#FEF6D9',
                     calendarBackground: '#FEF6D9',
                 }}
-                onDayPress={(day) => handleOnPressDay(day)}
+                onDayPress={handleOnPressDay}
                 markingType={'period'}
-                markedDates={selectedDays.marked}
-            />
+                markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
+            />           
+           
         </View>
     );
 }
@@ -83,5 +163,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FEF6D9',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    spinnerTextStyle: {
+        color: '#FFF',
     },
 });
