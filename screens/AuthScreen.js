@@ -4,7 +4,6 @@ import { supabase } from '../supabase.js';
 import Logo from '../assets/logo_neverleak.png';
 import { Toast } from 'toastify-react-native';
 import { TextInput } from 'react-native-paper';
-import Logo from '../Components/Logos/Logo.js';
 
 export default function Auth() {
     const [email, setEmail] = useState('');
