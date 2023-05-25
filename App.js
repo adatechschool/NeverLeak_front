@@ -12,6 +12,8 @@ import { SessionContext } from './Components/SessionContext';
 import { NextCycleContext } from './Components/NextCycleContext';
 import ToastManager from 'toastify-react-native';
 
+import { PaperProvider } from 'react-native-paper';
+
 export default function App() {
     const [session, setSession] = useState(null);
     const [nextCycle, setNextCycle] = useState({
@@ -33,13 +35,15 @@ export default function App() {
         <SessionContext.Provider value={{ session, setSession }}>
             <NextCycleContext.Provider value={{ nextCycle, setNextCycle }}>
                 <ToastManager />
-                <NavigationContainer>
-                    {session && session.user ? (
-                        <BottomNavigation key={session.user.id} session={session} />
-                    ) : (
-                        <Auth />
-                    )}
-                </NavigationContainer>
+                <PaperProvider>
+                    <NavigationContainer>
+                        {session && session.user ? (
+                            <BottomNavigation key={session.user.id} session={session} />
+                        ) : (
+                            <Auth />
+                        )}
+                    </NavigationContainer>
+                </PaperProvider>
             </NextCycleContext.Provider>
         </SessionContext.Provider>
     );
