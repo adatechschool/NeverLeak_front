@@ -47,6 +47,9 @@ export default function Auth() {
                     value={email}
                     placeholder="email@address.com"
                     autoCapitalize={'none'}
+                    underlineColor="transparent"
+                    activeUnderlineColor="transparent"
+                    selectionColor='#FF9A61'
                 />
                 <TextInput
                     style={styles.input}
@@ -63,11 +66,13 @@ export default function Auth() {
                     }
                     placeholder="password"
                     autoCapitalize={'none'}
+                    underlineColor="transparent"
+                    activeUnderlineColor="transparent"
+                    selectionColor='#FF9A61'
                 />
                 <View style={styles.passwordView}>
                     <Text style={styles.passwordText}>
-                        The password must contain at least 8 characters, including one upper case,
-                        one lower case, one number and one special character.
+                    Le mot de passe doit contenir au moins 8 caractères, comprenant une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.
                     </Text>
                 </View>
 
@@ -127,13 +132,13 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         width: 250,
-        borderRadius: 10,
+        borderRadius: 5,
         borderColor: '#FF9A61',
         borderWidth: 1,
         backgroundColor: 'white',
         margin: 5,
-        padding: 5,
-        elevation: 5,
+        //padding: 5,
+        //elevation: 5,
     },
     passwordView: {
         width: 250,
