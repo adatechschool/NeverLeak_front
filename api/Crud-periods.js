@@ -1,6 +1,15 @@
 import { supabase } from '../supabase';
-import { formatDistance, subDays } from 'date-fns';
 import compareAsc from 'date-fns/compareAsc';
+
+const getAllPeriods = async (userId) => {
+    const { data, error } = await supabase
+        .from('multi-periods')
+        .select('start_date, end_date')
+        .eq('user_id', userId)
+        .order('end_date', { ascending: true });
+    console.log({ data });
+    return data;
+};
 
 const getPeriodsDays = async (userId) => {
     const { data, error } = await supabase
@@ -106,4 +115,4 @@ const deletePeriodDay = async (userId, day) => {
 //     console.log('delete error = ', error);
 // };
 
-export { getPeriodsDays, addPeriodDay, deletePeriodDay };
+export { getPeriodsDays, addPeriodDay, deletePeriodDay, getAllPeriods };

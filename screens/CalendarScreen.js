@@ -3,8 +3,14 @@ import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
-import { getPeriodsDays, addPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
+import {
+    getPeriodsDays,
+    addPeriodDay,
+    deletePeriodDay,
+    getAllPeriods,
+} from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { eachDayOfInterval } from 'date-fns';
 
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
@@ -19,8 +25,24 @@ export default function CalendarScreen() {
     const [isLoading, setIsLoading] = useState(false);
 
     const readPeriodsDays = async () => {
-        const periodsDaysList = await getPeriodsDays(session.user.id);
+        const periodsDaysList = await getAllPeriods(session.user.id);
+        console.log({ periodsDaysList });
 
+        const eachDay = periodsDaysList.map((eachPeriod) => {
+            const startDay = new Date(eachPeriod.start_date);
+            const endDay = new Date(eachPeriod.end_date);
+
+            const timezoneOffset = startDay.getTimezoneOffset();
+            startDay.setHours(startDay.getHours() + timezoneOffset / 60);
+            endDay.setHours(endDay.getHours() + timezoneOffset / 60);
+
+            const array = eachDayOfInterval({
+                start: startDay,
+                end: endDay,
+            });
+            console.log({ array });
+        });
+        console.log({ eachDay });
         setSelectedDays(() => {
             return {
                 selected: periodsDaysList,
