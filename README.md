@@ -28,6 +28,9 @@
 - gestion du projet avec Miro / Trello
 - IDE : VS Code.
 
+![neverleak4](https://github.com/adatechschool/NeverLeak_front/assets/114992735/4a63cf46-3f07-476b-a76e-d861f384b8fd)
+
+
 ### Libraries utilisées
 
 -   ES Lint
