@@ -1,10 +1,34 @@
 # NeverLeak Front Repository
 
-# Présentation du projet
+### Contexte
 
-Création d'une application de suivi du cycle menstruel.
+- projet d'application mobile collectif
+- 8 personnes
+- premier run de 4 semaines
 
-# Libraries utilisées
+### Présentation du projet
+
+- Premier projet mobile.
+- Création d'une application de suivi du cycle menstruel.
+
+### Objectifs
+
+- découvrir un langage de programmation mobile.
+- externaliser la gestion du back via une infrastructure Backend-as-a-Service (BaaS).
+- utiliser un système de gestion de base de données relationnelle open source.
+- veiller à la sécurité des données utilisateur (RGPD).
+
+### Stack
+
+<br/> [![My Skills](https://skillicons.dev/icons?i=react,supabase,postgresql,github,git,vscode)](https://skillicons.dev)
+
+- frontend : React-Native avec surcouche Expo.
+- backend : Supabase et PostgreSQL.
+- versioning via Git / Github.
+- gestion du projet avec Miro / Trello
+- IDE : VS Code.
+
+### Libraries utilisées
 
 -   ES Lint
 -   Expo
