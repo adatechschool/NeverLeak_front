@@ -2,9 +2,9 @@
 
 ### Contexte
 
-- projet d'application mobile collectif
-- 8 personnes
-- premier run de 4 semaines
+- projet d'application mobile collectif.
+- 8 personnes.
+- premier run de 4 semaines.
 
 ### Présentation du projet
 
@@ -20,7 +20,7 @@
 
 ### Stack
 
-<br/> [![My Skills](https://skillicons.dev/icons?i=react,supabase,postgresql,github,git,vscode)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=react,supabase,postgresql,github,git,vscode)](https://skillicons.dev)
 
 - frontend : React-Native avec surcouche Expo.
 - backend : Supabase et PostgreSQL.
@@ -28,7 +28,9 @@
 - gestion du projet avec Miro / Trello
 - IDE : VS Code.
 
-![neverleak4](https://github.com/adatechschool/NeverLeak_front/assets/114992735/4a63cf46-3f07-476b-a76e-d861f384b8fd)
+<img src="https://github.com/adatechschool/NeverLeak_front/assets/114992735/4a63cf46-3f07-476b-a76e-d861f384b8fd" alt="neverleak4" width="300" style="margin: auto;">
+<img src="https://github.com/adatechschool/NeverLeak_front/assets/114992735/bde7e909-0156-4b05-9da9-17992314d441" alt="neverleak4" width="300" style="margin: auto;">
+<img src="https://github.com/adatechschool/NeverLeak_front/assets/114992735/ff175c35-ea6a-4ef4-bfd7-02cc20fcfcd9" alt="neverleak4" width="300" style="margin: auto;">
 
 
 ### Libraries utilisées
