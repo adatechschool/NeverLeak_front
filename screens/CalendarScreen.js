@@ -3,9 +3,8 @@ import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
-import { getPeriodsDays, postPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
+import { getPeriodsDays, addPeriodDay, deletePeriodDay } from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
-
 
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
@@ -40,11 +39,12 @@ export default function CalendarScreen() {
     const handleOnPressDay = async (event) => {
         setIsLoading(true);
         const periodDay = event.dateString;
+        console.log({ periodDay });
         if (selectedDays.selected.includes(periodDay)) {
             await deletePeriodDay(session.user.id, periodDay);
             readPeriodsDays();
         } else {
-            await postPeriodDay(session.user.id, periodDay);
+            await addPeriodDay(session.user.id, periodDay);
             readPeriodsDays();
         }
     };
@@ -124,7 +124,6 @@ export default function CalendarScreen() {
 
     return (
         <View style={styles.container}>
-
             <View style={{ height: 120 }} />
 
             <Spinner
@@ -140,8 +139,7 @@ export default function CalendarScreen() {
                 scrollEnabled={true}
                 // displayLoadingIndicator={true}
 
-                style={{                    
-
+                style={{
                     height: 350,
                 }}
                 theme={{
@@ -151,8 +149,7 @@ export default function CalendarScreen() {
                 onDayPress={handleOnPressDay}
                 markingType={'period'}
                 markedDates={{ ...selectedDays.marked, ...nextPeriod.marked }}
-            />           
-           
+            />
         </View>
     );
 }
