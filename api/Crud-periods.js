@@ -115,4 +115,4 @@ const deletePeriodDay = async (userId, day) => {
 //     console.log('delete error = ', error);
 // };
 
-export { getPeriodsDays, addPeriodDay, deletePeriodDay, getAllPeriods };
+export { getPeriodsDays, addPeriodDay, deletePeriodDay, getAllPeriods, addDays };

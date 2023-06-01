@@ -8,9 +8,10 @@ import {
     addPeriodDay,
     deletePeriodDay,
     getAllPeriods,
+    addDays,
 } from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { eachDayOfInterval } from 'date-fns';
+import { eachDayOfInterval, format } from 'date-fns';
 
 export default function CalendarScreen() {
     const { session, setSession } = useContext(SessionContext);
@@ -31,22 +32,25 @@ export default function CalendarScreen() {
         const eachDay = periodsDaysList.map((eachPeriod) => {
             const startDay = new Date(eachPeriod.start_date);
             const endDay = new Date(eachPeriod.end_date);
-
-            const timezoneOffset = startDay.getTimezoneOffset();
-            startDay.setHours(startDay.getHours() + timezoneOffset / 60);
-            endDay.setHours(endDay.getHours() + timezoneOffset / 60);
-
             const array = eachDayOfInterval({
                 start: startDay,
                 end: endDay,
             });
             console.log({ array });
+            return array;
         });
-        console.log({ eachDay });
+        //console.log({ eachDay });
+        console.log(eachDay.flat());
+        const dayList = eachDay.flat();
+        const dayListFormated = dayList.map((e) => {
+            const result = format(new Date(e), 'yyyy-MM-dd');
+            return result;
+        });
+        console.log({ dayListFormated });
         setSelectedDays(() => {
             return {
-                selected: periodsDaysList,
-                marked: markedPeriod(periodsDaysList),
+                selected: dayListFormated,
+                marked: markedPeriod(dayListFormated),
             };
         });
         setNextPeriod(() => {
