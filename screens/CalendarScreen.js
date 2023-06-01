@@ -3,13 +3,7 @@ import { CalendarList } from 'react-native-calendars';
 import { useState, useContext, useEffect } from 'react';
 import { SessionContext } from '../Components/SessionContext';
 import { nextCycleCalculation } from '../functions/nextCycleCalculation';
-import {
-    getPeriodsDays,
-    addPeriodDay,
-    deletePeriodDay,
-    getAllPeriods,
-    addDays,
-} from '../api/Crud-periods.js';
+import { addPeriodDay, deletePeriodDay, getAllPeriods } from '../api/Crud-periods.js';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { eachDayOfInterval, format } from 'date-fns';
 
@@ -27,7 +21,6 @@ export default function CalendarScreen() {
 
     const readPeriodsDays = async () => {
         const periodsDaysList = await getAllPeriods(session.user.id);
-        console.log({ periodsDaysList });
 
         const eachDay = periodsDaysList.map((eachPeriod) => {
             const startDay = new Date(eachPeriod.start_date);
@@ -36,36 +29,47 @@ export default function CalendarScreen() {
                 start: startDay,
                 end: endDay,
             });
-            console.log({ array });
-            return array;
+
+            const arrayFormated = array.map((array) => {
+                const result = format(new Date(array), 'yyyy-MM-dd');
+                return result;
+            });
+            return arrayFormated;
         });
-        //console.log({ eachDay });
-        console.log(eachDay.flat());
+
         const dayList = eachDay.flat();
         const dayListFormated = dayList.map((e) => {
             const result = format(new Date(e), 'yyyy-MM-dd');
             return result;
         });
-        console.log({ dayListFormated });
+
         setSelectedDays(() => {
             return {
                 selected: dayListFormated,
-                marked: markedPeriod(dayListFormated),
+                marked: markedPeriod(eachDay),
             };
         });
-        setNextPeriod(() => {
-            return {
-                selected: nextCycleCalculation(periodsDaysList[0]),
-                marked: markedNextPeriod(nextCycleCalculation(periodsDaysList[0])),
-            };
-        });
+        if (periodsDaysList.length > 0) {
+            setNextPeriod(() => {
+                return {
+                    selected: nextCycleCalculation(
+                        periodsDaysList[periodsDaysList.length - 1]['start_date']
+                    ),
+                    marked: markedNextPeriod(
+                        nextCycleCalculation(
+                            periodsDaysList[periodsDaysList.length - 1]['start_date']
+                        )
+                    ),
+                };
+            });
+        }
         setIsLoading(false);
     };
 
     const handleOnPressDay = async (event) => {
         setIsLoading(true);
         const periodDay = event.dateString;
-        console.log({ periodDay });
+
         if (selectedDays.selected.includes(periodDay)) {
             await deletePeriodDay(session.user.id, periodDay);
             readPeriodsDays();
@@ -75,42 +79,44 @@ export default function CalendarScreen() {
         }
     };
 
-    const markedPeriod = (days) => {
+    const markedPeriod = (eachDays) => {
         //cette fonction stylise les jours selectionnés en paramètre
         const markedDates = {};
-        if (days.length > 0) {
-            days.map((day) => {
-                if (day === days[0] && days.length > 1) {
-                    markedDates[day] = {
-                        startingDay: true,
-                        color: '#FF9A61',
-                        customTextStyle: {
-                            color: '#FFFFFF',
-                        },
-                    };
-                } else if (day === days[days.length - 1] && days.length > 1) {
-                    markedDates[day] = {
-                        selected: true,
-                        endingDay: true,
-                        color: '#FF9A61',
-                    };
-                } else if (day === days[0] && days.length === 1) {
-                    markedDates[day] = {
-                        //selected: true,
-                        disabled: true,
-                        startingDay: true,
-                        endingDay: true,
-                        color: '#FF9A61',
-                        customTextStyle: {
-                            color: '#FFFFFF',
-                        },
-                    };
-                } else {
-                    markedDates[day] = {
-                        selected: true,
-                        color: '#FF9A61',
-                    };
-                }
+        if (eachDays.length > 0) {
+            eachDays.map((period) => {
+                period.map((day) => {
+                    if (day === period[0] && period.length > 1) {
+                        markedDates[day] = {
+                            startingDay: true,
+                            color: '#FF9A61',
+                            customTextStyle: {
+                                color: '#FFFFFF',
+                            },
+                        };
+                    } else if (day === period[period.length - 1] && period.length > 1) {
+                        markedDates[day] = {
+                            selected: true,
+                            endingDay: true,
+                            color: '#FF9A61',
+                        };
+                    } else if (day === period[0] && period.length === 1) {
+                        markedDates[day] = {
+                            //selected: true,
+                            disabled: true,
+                            startingDay: true,
+                            endingDay: true,
+                            color: '#FF9A61',
+                            customTextStyle: {
+                                color: '#FFFFFF',
+                            },
+                        };
+                    } else {
+                        markedDates[day] = {
+                            selected: true,
+                            color: '#FF9A61',
+                        };
+                    }
+                });
             });
         }
         return markedDates;
