@@ -25,7 +25,7 @@
 - frontend : React-Native avec surcouche Expo.
 - backend : Supabase et PostgreSQL.
 - versioning via Git / Github.
-- gestion du projet avec Miro / Trello
+- gestion du projet avec Miro / Trello.
 - IDE : VS Code.
 
 <img src="https://github.com/adatechschool/NeverLeak_front/assets/114992735/4a63cf46-3f07-476b-a76e-d861f384b8fd" alt="neverleak4" width="300" style="margin: auto;">
