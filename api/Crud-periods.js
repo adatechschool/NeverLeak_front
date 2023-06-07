@@ -1,6 +1,7 @@
 import { supabase } from '../supabase';
-import compareAsc from 'date-fns/compareAsc';
-import { addDays } from '../functions/addDays.js';
+// import compareAsc from 'date-fns/compareAsc';
+// import { addDays, removeDays } from '../functions/addDays.js';
+import { format, addDays } from 'date-fns';
 
 const getAllPeriods = async (userId) => {
     const { data, error } = await supabase
@@ -42,25 +43,45 @@ const updatePeriodDay = async (newDate, day) => {
 
 const addPeriodDay = async (userId, day) => {
     const periodDays = await getPeriodsDays(userId);
+    console.log({ periodDays });
     const endDates = periodDays.map((date) => date.end_date);
+    console.log({ endDates });
+    const daySelectedRemoved = addDays(new Date(day), -1);
+    const formattedDay = format(new Date(daySelectedRemoved), 'yyyy-MM-dd');
+    console.log({ formattedDay });
 
     if (endDates.length < 1) {
+        console.log('entré dans if longueur de endDate < 1');
         postPeriodDay(userId, day);
-    } else {
-        for (date of endDates) {
-            const newDate = new Date(date);
-            const nextDay = addDays(newDate, 1);
-            const isEqual = compareAsc(new Date(nextDay), new Date(day));
-
-            if (isEqual == 0) {
-                updatePeriodDay(date, day);
-                break;
-            } else {
-                postPeriodDay(userId, day);
-                break;
-            }
-        }
+        return;
     }
+    if (endDates.includes(formattedDay)) {
+        updatePeriodDay(formattedDay, day);
+        return;
+    }
+    postPeriodDay(userId, day);
+
+    // for (date of endDates) {
+    //     const newDate = new Date(date);
+    //     console.log(date, newDate);
+    //     const nextDay = addDays(newDate, 1);
+    //     console.log(date, nextDay);
+    //     const isEqual = compareAsc(new Date(nextDay), new Date(day));
+    //     console.log(date, isEqual);
+    //     if (isEqual == 0) {
+    //         console.log(
+    //             'entré dans if jour à ajouter et next day de tous les enddates sont différents'
+    //         );
+    //         updatePeriodDay(date, day);
+    //         // break;
+    //     } else {
+    //         console.log(
+    //             'entré dans if jour à ajouter et next day de tous les enddates sont identiques'
+    //         );
+    //         postPeriodDay(userId, day);
+    //         // break;
+    //     }
+    // }
 };
 const deletePeriodDay = async (userId, day) => {
     const { data, error } = await supabase
