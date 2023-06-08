@@ -32,57 +32,63 @@ const postPeriodDay = async (userId, day) => {
     console.log('posts error =', error);
 };
 
-const updatePeriodDay = async (newDate, day) => {
+//changement de la fonction updateDay en 2 fonction : update le dernier jour et update le premier
+const updateEndDay = async (newDate, day) => {
     const { data, error } = await supabase
         .from('multi-periods')
         .update({ end_date: day })
         .eq('end_date', newDate);
 
-    console.log('posts error =', error);
+    console.log('update endDay error =', error);
 };
 
-const addPeriodDay = async (userId, day) => {
-    const periodDays = await getPeriodsDays(userId);
-    console.log({ periodDays });
-    const endDates = periodDays.map((date) => date.end_date);
-    console.log({ endDates });
-    const daySelectedRemoved = addDays(new Date(day), -1);
-    const formattedDay = format(new Date(daySelectedRemoved), 'yyyy-MM-dd');
-    console.log({ formattedDay });
+const updateStartDay = async (newDate, day) => {
+    const { data, error } = await supabase
+        .from('multi-periods')
+        .update({ start_date: day })
+        .eq('start_date', newDate);
 
+    console.log('update startDay error =', error);
+};
+
+//changement de la fonction pour ajouter un jour au cycle : definition des const au bon format
+//pour les startday et les endday puis recherche du jour sélectionné dans le tableau des dates.
+//Si le jour existe dans le tableau, la fonction appelle updateStartDay ou updateEndDay
+const addPeriodDay = async (userId, day) => {
+    const periodDays = await getAllPeriods(userId);
+    //faire un tableau des endDates recupérées de la BDD
+    const endDates = periodDays.map((date) => date.end_date);
+    //faire un tableau des startDates récupérées de la BDD
+    const startDates = periodDays.map((date) => date.start_date);
+    //Ajouter ou retirer un jour aux dates de début et dates de fin puis les formatter
+    const daySelectedRemoved = addDays(new Date(day), -1);
+    const daySelectedAdded = addDays(new Date(day), 1);
+    const formattedEndDay = format(new Date(daySelectedRemoved), 'yyyy-MM-dd');
+    const formattedStartDay = format(new Date(daySelectedAdded), 'yyyy-MM-dd');
+
+    //si pas de données dans la BDD, ajouter directement le jour.
     if (endDates.length < 1) {
         console.log('entré dans if longueur de endDate < 1');
         postPeriodDay(userId, day);
         return;
     }
-    if (endDates.includes(formattedDay)) {
-        updatePeriodDay(formattedDay, day);
+
+    //si le tableau des endDates contient le jour sélectionné -1, alors update le endDate
+    if (endDates.includes(formattedEndDay)) {
+        updateEndDay(formattedEndDay, day);
         return;
     }
-    postPeriodDay(userId, day);
 
-    // for (date of endDates) {
-    //     const newDate = new Date(date);
-    //     console.log(date, newDate);
-    //     const nextDay = addDays(newDate, 1);
-    //     console.log(date, nextDay);
-    //     const isEqual = compareAsc(new Date(nextDay), new Date(day));
-    //     console.log(date, isEqual);
-    //     if (isEqual == 0) {
-    //         console.log(
-    //             'entré dans if jour à ajouter et next day de tous les enddates sont différents'
-    //         );
-    //         updatePeriodDay(date, day);
-    //         // break;
-    //     } else {
-    //         console.log(
-    //             'entré dans if jour à ajouter et next day de tous les enddates sont identiques'
-    //         );
-    //         postPeriodDay(userId, day);
-    //         // break;
-    //     }
-    // }
+    //si le tableau des startDay contient le jour sélectionné +1, alors update le startDate
+    if (startDates.includes(formattedStartDay)) {
+        updateStartDay(formattedStartDay, day);
+        return;
+    }
+
+    //sinon poster le jour
+    postPeriodDay(userId, day);
 };
+
 const deletePeriodDay = async (userId, day) => {
     const { data, error } = await supabase
         .from('multi-periods')
