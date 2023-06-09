@@ -3,4 +3,9 @@ function addDays(date, days) {
     return date;
 }
 
-export {addDays};
+// function removeDays(date, days) {
+//     date.setDate(date.getDate() - days);
+//     return date;
+// }
+
+export { addDays };
