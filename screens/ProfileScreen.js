@@ -3,7 +3,7 @@ import { supabase } from '../supabase.js';
 import { StyleSheet, View, Alert, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 
-import { SessionContext } from '../Components/SessionContext';
+import { SessionContext } from '../Components/SessionContext.js';
 
 import { Toast } from 'toastify-react-native';
 

@@ -1,4 +1,4 @@
-import { supabase } from '../supabase';
+import { supabase } from '../supabase.js';
 // import compareAsc from 'date-fns/compareAsc';
 // import { addDays, removeDays } from '../functions/addDays.js';
 import { format, addDays } from 'date-fns';
@@ -9,7 +9,7 @@ const getAllPeriods = async (userId) => {
         .select('start_date, end_date')
         .eq('user_id', userId)
         .order('end_date', { ascending: true });
-
+    console.log({ data });
     return data;
 };
 

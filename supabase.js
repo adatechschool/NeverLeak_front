@@ -1,4 +1,4 @@
-import 'react-native-url-polyfill/auto';
+import 'react-native-url-polyfill/auto.js';
 import * as SecureStore from 'expo-secure-store';
 import { createClient } from '@supabase/supabase-js';
 

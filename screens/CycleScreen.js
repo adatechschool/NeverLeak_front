@@ -2,13 +2,13 @@ import React from 'react';
 import { View, StyleSheet, Text, Dimensions, Image } from 'react-native';
 import { useState, useContext, useEffect, useCallback } from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
-import { SessionContext } from '../Components/SessionContext';
-import { NextCycleContext } from '../Components/NextCycleContext';
-import { getPeriodsDays } from '../api/Crud-periods';
-import { nextCycleCalculation } from '../functions/nextCycleCalculation';
+import { SessionContext } from '../Components/SessionContext.js';
+import { NextCycleContext } from '../Components/NextCycleContext.js';
+import { getPeriodsDays } from '../api/Crud-periods.js';
+import { nextCycleCalculation } from '../utils/nextCycleCalculation.js';
 import { useIsFocused } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import WelcomeScreen from '../Components/Welcome';
+import WelcomeScreen from '../Components/Welcome.js';
 import Logo from '../assets/logo_neverleak.png';
 
 export default function CycleScreen({ navigation }) {
